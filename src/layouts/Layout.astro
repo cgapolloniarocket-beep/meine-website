@@ -12,21 +12,23 @@ const { title } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="description" content="Apollonia – Podcasts & Space Tech" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/png" href="/apollonia_mark_navy.png" />
+    <link rel="icon" type="image/png" href="/apollonia_mark_dark.png" />
     <title>{title}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=Montserrat:wght@300;400&display=swap" rel="stylesheet" />
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <slot />
   </body>
 </html>
 
 <style is:global>
   :root {
+    --banner-bg: #000000;
     --navy: #0B1D3A;
-    --navy-deep: #060F1F;
+    --navy-deep: #081220;
     --cream: #E8D5B7;
     --cream-light: #F2E8D5;
     --cream-pale: #FAF5ED;
@@ -54,5 +56,29 @@ const { title } = Astro.props;
   ::selection {
     background: var(--cream);
     color: var(--navy);
+  }
+
+  .skip-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    padding: 0.85rem 1.5rem;
+    background: var(--cream-pale);
+    color: var(--navy-deep);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transform: translateY(-120%);
+    transition: transform 0.2s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  }
+
+  .skip-link:focus-visible {
+    transform: translateY(0);
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
   }
 </style>

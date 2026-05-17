@@ -1,0 +1,40 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+---
+
+<Layout title="Apollonia – About Us">
+
+  <SiteHeader current="about" />
+
+  <main id="main-content">
+    <h1>About Us</h1>
+    <p>Coming soon.</p>
+  </main>
+
+</Layout>
+
+<style>
+  main {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 3rem;
+    font-weight: 400;
+    color: var(--cream-pale);
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: var(--text-light);
+    font-size: 1.1rem;
+  }
+</style>

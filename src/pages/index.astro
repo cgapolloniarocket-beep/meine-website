@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
 ---
 
 <Layout title="Apollonia – Coming Soon">
@@ -10,10 +11,10 @@ import Layout from '../layouts/Layout.astro';
     ))}
   </div>
 
-  <main>
-    <img src="/apollonia_lockup_navy.png" alt="Apollonia" class="logo" />
+<SiteHeader />
+
+  <main id="main-content">
     <p class="tagline">Something new is on the way.</p>
-    <a href="mailto:hello@apolloniaspace.com" class="email">hello@apolloniaspace.com</a>
   </main>
 
 </Layout>
@@ -52,12 +53,6 @@ import Layout from '../layouts/Layout.astro';
     padding: 2rem;
     text-align: center;
     position: relative;
-  }
-
-  .logo {
-    height: 36px;
-    filter: brightness(0) invert(0.88) sepia(0.2) saturate(0.5) hue-rotate(10deg);
-    margin-bottom: 1rem;
   }
 
   .tagline {
