@@ -11,10 +11,22 @@ import SiteHeader from '../components/SiteHeader.astro';
     ))}
   </div>
 
-<SiteHeader />
+  <SiteHeader />
 
-  <main id="main-content">
-    <p class="tagline">Something new is on the way.</p>
+  <main>
+    <div class="hero-text">
+      <h1>
+        PODCASTS<br />
+        FOR THE<br />
+        MOST<br />
+        AMBITIOUS<br />
+        FOUNDERS
+      </h1>
+      <div class="hero-bottom">
+        <span class="welcome">WELCOME TO</span>
+        <span class="brand">APOLLONIA</span>
+      </div>
+    </div>
   </main>
 
 </Layout>
@@ -46,34 +58,62 @@ import SiteHeader from '../components/SiteHeader.astro';
   main {
     min-height: 100vh;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 1.5rem;
-    padding: 2rem;
-    text-align: center;
+    padding: 8rem 4rem 4rem;
     position: relative;
   }
 
-  .tagline {
-    font-family: 'Instrument Serif', serif;
-    font-size: clamp(1.4rem, 3vw, 2rem);
-    font-style: italic;
-    color: var(--cream-pale);
-    font-weight: 400;
+  .hero-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 80vh;
+    width: 100%;
   }
 
-  .email {
-    color: var(--accent);
-    text-decoration: none;
-    font-size: 0.9rem;
-    letter-spacing: 0.05em;
-    border-bottom: 1px solid rgba(196, 164, 110, 0.3);
-    padding-bottom: 2px;
-    transition: border-color 0.3s;
+  h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(3rem, 10vw, 8rem);
+    font-weight: 800;
+    line-height: 0.95;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
   }
 
-  .email:hover {
-    border-color: var(--accent);
+  .hero-bottom {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: auto;
+  }
+
+  .welcome {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .brand {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 0.4rem 1rem;
+    border-radius: 4px;
+  }
+
+  @media (max-width: 768px) {
+    main {
+      padding: 7rem 2rem 3rem;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 12vw, 5rem);
+    }
   }
 </style>

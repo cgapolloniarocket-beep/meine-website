@@ -3,38 +3,117 @@ import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 ---
 
-<Layout title="Apollonia – Podcast">
+<Layout title="Apollonia – Coming Soon">
 
-  <SiteHeader current="podcast" />
+  <div class="stars">
+    {Array.from({length: 60}).map((_, i) => (
+      <div class="star" style={`--x: ${Math.random() * 100}%; --y: ${Math.random() * 100}%; --delay: ${Math.random() * 4}s; --size: ${Math.random() * 2 + 1}px;`} />
+    ))}
+  </div>
 
-  <main id="main-content">
-    <h1>Podcast</h1>
-    <p>Coming soon.</p>
+  <SiteHeader />
+
+  <main>
+    <div class="hero-text">
+      <h1>
+        PODCASTS<br />
+        FOR THE<br />
+        MOST<br />
+        AMBITIOUS<br />
+        FOUNDERS
+      </h1>
+      <div class="hero-bottom">
+        <span class="welcome">WELCOME TO</span>
+        <span class="brand">APOLLONIA</span>
+      </div>
+    </div>
   </main>
 
 </Layout>
 
 <style>
+  .stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .star {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--size);
+    height: var(--size);
+    background: var(--cream);
+    border-radius: 50%;
+    opacity: 0;
+    animation: twinkle 4s var(--delay) infinite ease-in-out;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 0.6; }
+  }
+
   main {
     min-height: 100vh;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    text-align: center;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+  }
+
+  .hero-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 80vh;
+    width: 100%;
   }
 
   h1 {
-    font-family: 'Instrument Serif', serif;
-    font-size: 3rem;
-    font-weight: 400;
-    color: var(--cream-pale);
-    margin-bottom: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(3rem, 10vw, 8rem);
+    font-weight: 800;
+    line-height: 0.95;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
   }
 
-  p {
-    color: var(--text-light);
+  .hero-bottom {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: auto;
+  }
+
+  .welcome {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .brand {
+    font-family: 'Montserrat', sans-serif;
     font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: #000000;
+    background: #ffffff;
+    padding: 0.5rem 1.2rem;
+    border-radius: 2px;
+  }
+
+  @media (max-width: 768px) {
+    main {
+      padding: 7rem 2rem 3rem;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 12vw, 5rem);
+    }
   }
 </style>
