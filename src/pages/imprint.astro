@@ -1,0 +1,248 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+---
+<Layout title="Apollonia – Imprint">
+  <div class="stars">
+    {Array.from({length: 30}).map((_, i) => (
+      <div class="star" style={`--x: ${Math.random() * 100}%; --y: ${Math.random() * 100}%; --delay: ${Math.random() * 4}s; --size: ${Math.random() * 2 + 1}px;`} />
+    ))}
+  </div>
+  <SiteHeader />
+  <main>
+    <h1>Imprint</h1>
+    <div class="imprint-content">
+      <p><strong>Apollonia Space</strong></p>
+      <p>Caspar Apollonia</p>
+      <p>Musterstrasse 1</p>
+      <p>10115 Berlin, Germany</p>
+      <p>Email: hello@apolloniaspace.com</p>
+    </div>
+  </main>
+</Layout>
+<style>
+  .stars { position: fixed; inset: 0; pointer-events: none; }
+  .star { position: absolute; left: var(--x); top: var(--y); width: var(--size); height: var(--size); background: #ffffff; border-radius: 50%; opacity: 0; animation: twinkle 3s var(--delay) infinite ease-in-out; }
+  @keyframes twinkle { 0%, 100% { opacity: 0; } 50% { opacity: 0.8; } }
+  main { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 8rem 4rem 4rem; position: relative; }
+  h1 { font-family: 'Montserrat', sans-serif; font-size: 2rem; font-weight: 400; text-transform: uppercase; letter-spacing: 0.1em; color: #ffffff; margin-bottom: 3rem; }
+  .imprint-content p { font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 300; color: rgba(255, 255, 255, 0.7); line-height: 1.8; margin-bottom: 0.5rem; }
+  .imprint-content strong { font-weight: 500; color: #ffffff; }
+</style>
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+---
+
+<Layout title="Apollonia – Coming Soon">
+
+  <div class="stars">
+    {Array.from({length: 30}).map((_, i) => (
+      <div class="star" style={`--x: ${Math.random() * 100}%; --y: ${Math.random() * 100}%; --delay: ${Math.random() * 4}s; --size: ${Math.random() * 2 + 1}px;`} />
+    ))}
+    {Array.from({length: 20}).map((_, i) => (
+      <div class="star bright" style={`--x: ${Math.random() * 100}%; --y: ${Math.random() * 100}%; --delay: ${Math.random() * 4}s; --size: ${Math.random() * 3 + 2}px;`} />
+    ))}
+  </div>
+
+  <div class="shooting-stars">
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+  </div>
+
+  <SiteHeader />
+
+  <main>
+    <div class="hero-text">
+      <h1>
+        PODCASTS<br />
+        FOR THE<br />
+        SPACE<br />
+        INDUSTRY<br />
+        OF TOMORROW
+      </h1>
+      <div class="hero-bottom">
+        <span class="welcome">WELCOME TO</span>
+        <span class="brand">APOLLONIA</span>
+      </div>
+    </div>
+  </main>
+
+  <section class="section-two">
+    <h2>Dein nächster Inhalt hier</h2>
+  </section>
+
+</Layout>
+
+<style>
+  .stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .star {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--size);
+    height: var(--size);
+    background: #ffffff;
+    border-radius: 50%;
+    opacity: 0;
+    animation: twinkle 3s var(--delay) infinite ease-in-out;
+  }
+
+  .star.bright {
+    box-shadow: 0 0 10px 4px rgba(255, 255, 255, 0.8);
+    animation: twinkleBright 6s var(--delay) infinite ease-in-out;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 0.8; }
+  }
+
+  @keyframes twinkleBright {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+  }
+
+  .shooting-stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 5;
+  }
+
+  .shooting-star {
+    position: absolute;
+    width: 200px;
+    height: 3px;
+    background: linear-gradient(to right, #ffffff, transparent);
+    border-radius: 50%;
+    opacity: 0;
+    box-shadow: 0 0 12px 3px rgba(255, 255, 255, 0.5);
+  }
+
+  .shooting-star:nth-child(1) {
+    top: 15%;
+    left: 60%;
+    transform: rotate(-35deg);
+    animation: shoot 3s 2s infinite;
+  }
+
+  .shooting-star:nth-child(2) {
+    top: 35%;
+    left: 75%;
+    transform: rotate(-30deg);
+    animation: shoot 4s 5s infinite;
+  }
+
+  .shooting-star:nth-child(3) {
+    top: 55%;
+    left: 45%;
+    transform: rotate(-40deg);
+    animation: shoot 5s 8s infinite;
+  }
+
+  @keyframes shoot {
+    0% {
+      opacity: 0;
+      transform: translateX(0) translateY(0) rotate(-35deg);
+    }
+    3% {
+      opacity: 1;
+    }
+    15% {
+      opacity: 0;
+      transform: translateX(-400px) translateY(280px) rotate(-35deg);
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  main {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+  }
+
+  .hero-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 80vh;
+    width: 100%;
+  }
+
+  h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(2.8rem, 9vw, 7rem);
+    font-weight: 800;
+    line-height: 0.95;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-bottom {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: auto;
+  }
+
+  .welcome {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .brand {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 0.4rem 1rem;
+    border-radius: 4px;
+  }
+
+  .section-two {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem;
+    position: relative;
+  }
+
+  .section-two h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  @media (max-width: 768px) {
+    main {
+      padding: 7rem 2rem 3rem;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 12vw, 5rem);
+    }
+  }
+</style>

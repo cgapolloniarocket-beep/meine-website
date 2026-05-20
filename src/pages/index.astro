@@ -5,35 +5,52 @@ import SiteHeader from '../components/SiteHeader.astro';
 
 <Layout title="Apollonia – Coming Soon">
 
-  <div class="stars">
-    {Array.from({length: 60}).map((_, i) => (
-      <div class="star" style={`--x: ${Math.random() * 100}%; --y: ${Math.random() * 100}%; --delay: ${Math.random() * 4}s; --size: ${Math.random() * 2 + 1}px;`} />
-    ))}
-  </div>
+  <section class="page-one">
+    <div class="stars">
+      {Array.from({length: 30}).map((_, i) => (
+        <div class="star" style={`--x: ${Math.random() * 100}%; --y: ${Math.random() * 100}%; --delay: ${Math.random() * 4}s; --size: ${Math.random() * 2 + 1}px;`} />
+      ))}
+      {Array.from({length: 8}).map((_, i) => (
+        <div class="star bright" style={`--x: ${Math.random() * 100}%; --y: ${Math.random() * 100}%; --delay: ${Math.random() * 4}s; --size: ${Math.random() * 3 + 2}px;`} />
+      ))}
+    </div>
 
-  <SiteHeader />
+    <div class="shooting-stars">
+      <div class="shooting-star"></div>
+      <div class="shooting-star"></div>
+      <div class="shooting-star"></div>
+    </div>
 
-  <main>
+    <SiteHeader />
+
     <div class="hero-text">
       <h1>
-        PODCASTS<br />
-        FOR THE<br />
-        MOST<br />
-        AMBITIOUS<br />
-        FOUNDERS
+       ENGINEERED <br />
+       ON EARTH.<br />
+       BUILT FOR SPACE.<br />
       </h1>
-      <div class="hero-bottom">
-        <span class="welcome">WELCOME TO</span>
-        <span class="brand">APOLLONIA</span>
-      </div>
     </div>
-  </main>
+  </section>
+
+  <section class="page-two">
+    <h2>Seite 2</h2>
+  </section>
+
+  <section class="page-three">
+    <h2>Seite 3</h2>
+  </section>
 
 </Layout>
 
 <style>
+  .page-one {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+  }
+
   .stars {
-    position: fixed;
+    position: absolute;
     inset: 0;
     pointer-events: none;
   }
@@ -44,72 +61,130 @@ import SiteHeader from '../components/SiteHeader.astro';
     top: var(--y);
     width: var(--size);
     height: var(--size);
-    background: var(--cream);
+    background: #ffffff;
     border-radius: 50%;
     opacity: 0;
-    animation: twinkle 4s var(--delay) infinite ease-in-out;
+    animation: twinkle 3s var(--delay) infinite ease-in-out;
+  }
+
+  .star.bright {
+    box-shadow: 0 0 10px 4px rgba(255, 255, 255, 0.8);
+    animation: twinkleBright 6s var(--delay) infinite ease-in-out;
   }
 
   @keyframes twinkle {
     0%, 100% { opacity: 0; }
-    50% { opacity: 0.6; }
+    50% { opacity: 0.8; }
   }
 
-  main {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    padding: 8rem 4rem 4rem;
-    position: relative;
+  @keyframes twinkleBright {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+  }
+
+  .shooting-stars {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 5;
+  }
+
+  .shooting-star {
+    position: absolute;
+    width: 200px;
+    height: 3px;
+    background: linear-gradient(to right, #ffffff, transparent);
+    border-radius: 50%;
+    opacity: 0;
+    box-shadow: 0 0 12px 3px rgba(255, 255, 255, 0.5);
+  }
+
+  .shooting-star:nth-child(1) {
+    top: 15%;
+    left: 60%;
+    transform: rotate(-35deg);
+    animation: shoot 3s 2s infinite;
+  }
+
+  .shooting-star:nth-child(2) {
+    top: 35%;
+    left: 75%;
+    transform: rotate(-30deg);
+    animation: shoot 4s 5s infinite;
+  }
+
+  .shooting-star:nth-child(3) {
+    top: 55%;
+    left: 45%;
+    transform: rotate(-40deg);
+    animation: shoot 5s 8s infinite;
+  }
+
+  @keyframes shoot {
+    0% {
+      opacity: 0;
+      transform: translateX(0) translateY(0) rotate(-35deg);
+    }
+    3% {
+      opacity: 1;
+    }
+    15% {
+      opacity: 0;
+      transform: translateX(-400px) translateY(280px) rotate(-35deg);
+    }
+    100% {
+      opacity: 0;
+    }
   }
 
   .hero-text {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 80vh;
-    width: 100%;
+    padding: 14rem 4rem 0;
+    position: relative;
+    z-index: 3;
   }
 
   h1 {
-    font-family: 'Montserrat', sans-serif;
-    font-size: clamp(3rem, 10vw, 8rem);
-    font-weight: 800;
+    font-size: clamp(2rem, 6vw, 5rem);
     line-height: 0.95;
     color: #ffffff;
-    text-transform: uppercase;
     letter-spacing: -0.02em;
+    margin-bottom: 2rem;
   }
 
-  .hero-bottom {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-top: auto;
-  }
-
-  .welcome {
+  .tagline {
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.85rem;
+    font-size: clamp(0.9rem, 1.8vw, 1.3rem);
     font-weight: 300;
-    letter-spacing: 0.15em;
+    font-style: normal;
     color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
   }
 
-  .brand {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 700;
+  .page-two {
+    min-height: 100vh;
+    padding: 4rem;
+    background: var(--navy-deep);
+  }
+
+  .page-three {
+    min-height: 100vh;
+    padding: 4rem;
+    background: var(--navy-deep);
+  }
+
+  .page-two h2,
+  .page-three h2 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.5);
     letter-spacing: 0.1em;
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.15);
-    padding: 0.4rem 1rem;
-    border-radius: 4px;
   }
 
   @media (max-width: 768px) {
-    main {
-      padding: 7rem 2rem 3rem;
+    .hero-text {
+      padding: 7rem 2rem 0;
     }
 
     h1 {
