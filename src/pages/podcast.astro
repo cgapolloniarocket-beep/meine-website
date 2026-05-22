@@ -30,6 +30,8 @@ import SiteHeader from '../components/SiteHeader.astro';
         SPACE INDUSTRY<br />
         OF TOMORROW
       </h1>
+      <p class="subtitle">Unfiltered conversations with the leaders driving the space economy.</p>
+      <p class="subtitle">Founders, Investors, Politicians, Operators — and everyone in between.</p>
     </div>
 
     <div class="featured-episode">
@@ -64,6 +66,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     position: relative;
     height: 100vh;
     overflow: hidden;
+    background-color: #050d1a;
   }
 
   .stars {
@@ -156,7 +159,7 @@ import SiteHeader from '../components/SiteHeader.astro';
   }
 
   .hero-text {
-    padding: 14rem 4rem 0;
+    padding: 10rem 4rem 0;
     position: relative;
     z-index: 3;
   }
@@ -169,6 +172,25 @@ import SiteHeader from '../components/SiteHeader.astro';
     color: #ffffff;
     text-transform: uppercase;
     letter-spacing: -0.02em;
+  }
+
+  .subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.94);
+    letter-spacing: 0.15em;
+    margin-top: 0;
+    text-transform: uppercase;
+    padding-left: 0.5rem;
+    line-height: 1.5;
+    max-width: 50%;
+    letter-spacing: 0.05em;  
+}
+  
+
+  .subtitle:first-of-type {
+    margin-top: 0.5rem;
   }
 
   .featured-episode {

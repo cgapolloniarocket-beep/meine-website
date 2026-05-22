@@ -1,4 +1,6 @@
 ---
+import SiteFooter from '../components/SiteFooter.astro';
+
 interface Props {
   title: string;
 }
@@ -10,83 +12,24 @@ const { title } = Astro.props;
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="Apollonia – Podcasts & Space Tech" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/png" href="/apollonia_mark_dark.png" />
     <title>{title}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=Montserrat:ital,wght@0,200;0,300;0,400;0,700;0,800;1,800&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <a class="skip-link" href="#main-content">Skip to main content</a>
-    <slot />
+    <main>
+      <slot />
+    </main>
+    <SiteFooter />
   </body>
 </html>
 
 <style is:global>
-  :root {
-    --banner-bg: #000000;
-    --navy: #0B1D3A;
-    --navy-deep: #081220;
-    --cream: #E8D5B7;
-    --cream-light: #F2E8D5;
-    --cream-pale: #FAF5ED;
-    --accent: #C4A46E;
-    --text-light: #8A9BB5;
-  }
-
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
   body {
-    font-family: 'DM Sans', sans-serif;
-    background-color: var(--navy-deep);
-    color: var(--cream);
-    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
   }
-
-  ::selection {
-    background: var(--cream);
-    color: var(--navy);
-  }
-
-h1, h2, h3 {
-    font-family: 'Barlow', sans-serif;
-    font-weight: 800;
-    font-style: normal;
-    text-transform: uppercase;
-    color: #e0e0e0;
-  }
-
-  .skip-link {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 100;
-    padding: 0.85rem 1.5rem;
-    background: var(--cream-pale);
-    color: var(--navy-deep);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 1rem;
-    font-weight: 600;
-    text-decoration: none;
-    transform: translateY(-120%);
-    transition: transform 0.2s;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  }
-
-  .skip-link:focus-visible {
-    transform: translateY(0);
-    outline: 3px solid var(--accent);
-    outline-offset: 3px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  main {
+    flex: 1;
   }
 </style>
