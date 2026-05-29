@@ -38,8 +38,8 @@ import SiteHeader from '../components/SiteHeader.astro';
   </section>
 </Layout>
 
-<script>
-  import * as THREE from 'three';
+<script type="module" is:inline>
+  import * as THREE from 'https://unpkg.com/three@0.128.0/build/three.module.js';
 
   const container = document.getElementById('globe');
   if (container) {
