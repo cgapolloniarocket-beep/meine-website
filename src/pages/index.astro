@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 ---
-
+ 
 <Layout title="Apollonia – Coming Soon">
   <section class="page-one">
     <!-- Sterne Hintergrund -->
@@ -21,9 +21,9 @@ import SiteHeader from '../components/SiteHeader.astro';
         );
       })}
     </div>
-
+ 
     <SiteHeader />
-
+ 
     <div class="hero-text">
       <h1>
         ENGINEERED
@@ -33,34 +33,34 @@ import SiteHeader from '../components/SiteHeader.astro';
         BUILT FOR SPACE.
       </h1>
     </div>
-
+ 
     <div class="globe-container" id="globe"></div>
   </section>
 </Layout>
-
-<script type="module" is:inline>
-  import * as THREE from 'https://unpkg.com/three@0.128.0/build/three.module.js';
-
+ 
+<script>
+  import * as THREE from 'three';
+ 
   const container = document.getElementById('globe');
   if (container) {
     const R = 0.92;
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(renderer.domElement);
-
+ 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
     camera.position.z = 4.8;
-
+ 
     const sunLight = new THREE.DirectionalLight(0xfff4e6, 2.0);
     sunLight.position.set(-2, 0.5, 3); 
     scene.add(sunLight);
-
+ 
     const g = new THREE.Group();
     g.rotation.x = 0.1;
     g.rotation.y = 4.0;
     scene.add(g);
-
+ 
     const loader = new THREE.TextureLoader();
     const earthMat = new THREE.MeshPhongMaterial({
       map: loader.load('https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/textures/planets/earth_atmos_2048.jpg'),
@@ -71,7 +71,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     
     const earth = new THREE.Mesh(new THREE.SphereGeometry(R, 96, 96), earthMat);
     g.add(earth);
-
+ 
     const clouds = new THREE.Mesh(
       new THREE.SphereGeometry(R + 0.005, 96, 96),
       new THREE.MeshPhongMaterial({
@@ -82,7 +82,7 @@ import SiteHeader from '../components/SiteHeader.astro';
       })
     );
     g.add(clouds);
-
+ 
     function animate() {
       requestAnimationFrame(animate);
       // Erde langsam
@@ -94,20 +94,20 @@ import SiteHeader from '../components/SiteHeader.astro';
     animate();
   }
 </script>
-
+ 
 <style>
   .page-one { position: relative; height: 100vh; overflow: hidden; background-color: #02050a; }
   
   .stars { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
   .star { position: absolute; left: var(--x); top: var(--y); width: var(--size); height: var(--size); background: white; border-radius: 50%; opacity: var(--opacity); animation: twinkle var(--dur) infinite alternate; }
   @keyframes twinkle { from { opacity: 0.2; } to { opacity: 1; } }
-
+ 
   .hero-text 
   { position: relative; 
   z-index: 3; 
   pointer-events: none; 
   padding: 10rem 4rem 0; }
-
+ 
   h1 { 
     font-family: 'Barlow', 
     sans-serif; 
@@ -128,7 +128,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     pointer-events: none; 
     transform: translate(-50%, -45%); 
   }
-
+ 
   @media (max-width: 768px) {
     .globe-container { 
       left: 60%; 
