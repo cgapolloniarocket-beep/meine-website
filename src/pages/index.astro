@@ -136,38 +136,40 @@ import SiteHeader from '../components/SiteHeader.astro';
   /* ============ MOBILE STYLES ============ */
   @media (max-width: 768px) {
     .hero-text {
-      padding: 6rem 1.5rem 0;
+      padding: 7rem 1.5rem 0;
+      max-width: 58%;
     }
  
     h1 {
-      font-size: 2.6rem;
-      line-height: 1.05;
+      font-size: 1.6rem;
+      line-height: 1.1;
     }
  
     .globe-container { 
-      left: 62%; 
-      top: 58%;
-      width: 480px; 
-      height: 480px; 
-      transform: translate(-50%, 0);
+      left: 78%; 
+      top: 30%;
+      width: 320px; 
+      height: 320px; 
+      transform: translate(-50%, -50%);
       opacity: 0.9;
     }
   }
  
   @media (max-width: 380px) {
     .hero-text {
-      padding: 5.5rem 1.2rem 0;
+      padding: 6.5rem 1.2rem 0;
+      max-width: 60%;
     }
  
     h1 {
-      font-size: 2.2rem;
+      font-size: 1.35rem;
     }
  
     .globe-container { 
-      width: 400px; 
-      height: 400px; 
-      top: 60%;
+      left: 80%;
+      top: 28%;
+      width: 260px; 
+      height: 260px; 
     }
   }
 </style>
- 
