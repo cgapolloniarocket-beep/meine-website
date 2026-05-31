@@ -140,6 +140,33 @@ import SiteHeader from '../components/SiteHeader.astro';
     }
  
     h1 {
-      font-size: 2.2rem;
-      line-height: 1;
+      font-size: 2.6rem;
+      line-height: 1.05;
     }
+ 
+    .globe-container { 
+      left: 50%; 
+      top: 70%;
+      width: 300px; 
+      height: 300px; 
+      transform: translate(-50%, 0);
+      opacity: 0.9;
+    }
+  }
+ 
+  @media (max-width: 380px) {
+    .hero-text {
+      padding: 5.5rem 1.2rem 0;
+    }
+ 
+    h1 {
+      font-size: 2.2rem;
+    }
+ 
+    .globe-container { 
+      width: 250px; 
+      height: 250px; 
+      top: 72%;
+    }
+  }
+</style>
