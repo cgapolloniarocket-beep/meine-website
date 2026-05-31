@@ -103,7 +103,7 @@
   .site-footer {
     background: #000;
     color: #fff;
-    padding: 5rem 4rem 3rem;
+    padding: 3.5rem 4rem 3rem;
     font-family: 'Barlow', sans-serif;
   }
  
@@ -113,15 +113,19 @@
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
     gap: 6rem;
+    align-items: start;
     padding-bottom: 4rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
  
   .newsletter h3 {
     font-family: 'Barlow', sans-serif;
-    font-size: 2rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: #ffffff;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 0;
     margin-bottom: 1rem;
   }
  
@@ -199,6 +203,7 @@
     font-weight: 700;
     color: #ffffff;
     letter-spacing: 0.1em;
+    margin-top: 0;
     margin-bottom: 1.5rem;
   }
  
@@ -266,6 +271,13 @@
     color: rgba(255, 255, 255, 0.3);
   }
  
+  /* EXPLORE auf Desktop nach rechts */
+  @media (min-width: 1025px) {
+    .footer-inner > :nth-child(2) {
+      padding-left: 5rem;
+    }
+  }
+ 
   @media (max-width: 1024px) {
     .footer-inner {
       grid-template-columns: 1fr 1fr;
@@ -298,7 +310,7 @@
     }
  
     .newsletter h3 {
-      font-size: 1.5rem;
+      font-size: 1rem;
       line-height: 1.2;
     }
  
@@ -334,4 +346,3 @@
     }
   }
 </style>
- 
