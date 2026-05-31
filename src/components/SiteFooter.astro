@@ -268,8 +268,13 @@
  
   @media (max-width: 1024px) {
     .footer-inner {
-      grid-template-columns: 1fr;
-      gap: 3rem;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem 2rem;
+    }
+ 
+    /* Newsletter über volle Breite oben */
+    .newsletter {
+      grid-column: 1 / -1;
     }
  
     .site-footer {
@@ -286,6 +291,10 @@
   @media (max-width: 600px) {
     .site-footer {
       padding: 3rem 1.5rem 2.5rem;
+    }
+ 
+    .footer-inner {
+      gap: 2.5rem 1rem;
     }
  
     .newsletter h3 {
@@ -308,8 +317,21 @@
       padding: 0.9rem 1.5rem;
     }
  
+    .fcol h5 {
+      font-size: 1rem;
+    }
+ 
+    .fcol ul li a {
+      font-size: 0.9rem;
+    }
+ 
+    .social {
+      gap: 0.5rem;
+    }
+ 
     .footer-base {
       margin-top: 1.5rem;
     }
   }
 </style>
+ 
