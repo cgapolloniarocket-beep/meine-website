@@ -84,6 +84,14 @@ const {
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Fade-in beim ersten Seitenaufruf (Direktlink / Reload).
+       Läuft nicht bei ClientRouter-Navigation, weil <body> dort persistiert. */
+    animation: initialFadeIn 0.6s ease-out;
+  }
+ 
+  @keyframes initialFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
  
   main {
