@@ -5,7 +5,6 @@ import SiteHeader from '../components/SiteHeader.astro';
  
 <Layout title="Apollonia – Coming Soon">
   <section class="page-one">
-    <!-- Sterne Hintergrund -->
     <div class="stars">
       {Array.from({ length: 120 }).map(() => {
         const size = (0.5 + Math.random() * 1.5).toFixed(2);
@@ -85,9 +84,7 @@ import SiteHeader from '../components/SiteHeader.astro';
  
     function animate() {
       requestAnimationFrame(animate);
-      // Erde langsam
       g.rotation.y += 0.0004; 
-      // Wolken schneller als Erde
       clouds.rotation.y += 0.0003; 
       renderer.render(scene, camera);
     }
@@ -96,27 +93,34 @@ import SiteHeader from '../components/SiteHeader.astro';
 </script>
  
 <style>
-  .page-one { position: relative; height: 100vh; overflow: hidden; background-color: #02050a; }
+  .page-one { 
+    position: relative; 
+    height: 100vh; 
+    overflow: hidden; 
+    background-color: #02050a; 
+  }
   
   .stars { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
   .star { position: absolute; left: var(--x); top: var(--y); width: var(--size); height: var(--size); background: white; border-radius: 50%; opacity: var(--opacity); animation: twinkle var(--dur) infinite alternate; }
   @keyframes twinkle { from { opacity: 0.2; } to { opacity: 1; } }
  
-  .hero-text 
-  { position: relative; 
-  z-index: 3; 
-  pointer-events: none; 
-  padding: 10rem 4rem 0; }
+  .hero-text { 
+    position: relative; 
+    z-index: 3; 
+    pointer-events: none; 
+    padding: 10rem 4rem 0;
+  }
  
   h1 { 
-    font-family: 'Barlow', 
-    sans-serif; 
+    font-family: 'Barlow', sans-serif; 
     font-size: clamp(2rem, 6vw, 5rem); 
     font-weight: 800; 
     line-height: 0.95; 
     color: #e0e0e0; 
     letter-spacing: -0.02em; 
-    text-transform: uppercase; }
+    text-transform: uppercase;
+    margin: 0;
+  }
   
   .globe-container { 
     position: absolute; 
@@ -124,17 +128,18 @@ import SiteHeader from '../components/SiteHeader.astro';
     left: 80%; 
     width: 950px; 
     height: 950px; 
-    z-index: 2; /* Über den Sternen */
+    z-index: 2;
     pointer-events: none; 
     transform: translate(-50%, -45%); 
   }
  
+  /* ============ MOBILE STYLES ============ */
   @media (max-width: 768px) {
-    .globe-container { 
-      left: 60%; 
-      width: 440px; 
-      height: 440px; 
-      transform: translate(-50%, 10%); 
+    .hero-text {
+      padding: 6rem 1.5rem 0;
     }
-  }
-</style>
+ 
+    h1 {
+      font-size: 2.2rem;
+      line-height: 1;
+    }

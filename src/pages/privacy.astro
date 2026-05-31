@@ -1,0 +1,105 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+---
+<Layout title="Apollonia – Privacy Policy">
+  <div class="stars">
+    {Array.from({length: 30}).map((_, i) => (
+      <div class="star" style={`--x: ${Math.random() * 100}%; --y: ${Math.random() * 100}%; --delay: ${Math.random() * 4}s; --size: ${Math.random() * 2 + 1}px;`} />
+    ))}
+  </div>
+  <SiteHeader />
+  <main>
+    <h1>Privacy Policy</h1>
+    <div class="content">
+ 
+      <p class="updated">Last updated: May 2026</p>
+ 
+      <h2>1. Controller</h2>
+      <p>The controller responsible for data processing on this website is:</p>
+      <p>
+        Apollonia Space<br />
+        Caspar Gross<br />
+        [Street and house number]<br />
+        [Postal code and city], Germany<br />
+        Email: contact@apolloniaspace.com
+      </p>
+ 
+      <h2>2. Hosting</h2>
+      <p>This website is hosted by Cloudflare, Inc. (101 Townsend St, San Francisco, CA 94107, USA). When you visit this site, Cloudflare automatically collects and stores technical information in server log files that your browser transmits, including your IP address, browser type, operating system, referrer URL, and the date and time of access.</p>
+      <p>This processing is based on our legitimate interest in the secure and stable operation of our website (Art. 6(1)(f) GDPR). Cloudflare also provides security functions to protect against attacks. A data processing agreement is in place with Cloudflare.</p>
+ 
+      <h2>3. Newsletter</h2>
+      <p>If you subscribe to our newsletter, the email address you provide is processed by Substack Inc. (San Francisco, CA, USA) to deliver our newsletter. You can unsubscribe at any time using the link in each email.</p>
+      <p>This processing is based on your consent (Art. 6(1)(a) GDPR). For details on how Substack handles your data, please see Substack's own privacy policy.</p>
+ 
+      <h2>4. External Links and Social Media</h2>
+      <p>Our website contains links to external platforms (YouTube, Spotify, Apple Podcasts, X, Instagram, LinkedIn, Substack). When you click these links, you leave our website and the respective provider's privacy policy applies. We have no control over the data processing of these third parties.</p>
+ 
+      <h2>5. Cookies</h2>
+      <p>This website does not use tracking or analytics cookies. Cloudflare may set technically necessary cookies to ensure security and proper functioning of the site. These are based on our legitimate interest (Art. 6(1)(f) GDPR).</p>
+ 
+      <h2>6. Your Rights</h2>
+      <p>Under the GDPR you have the right to: access your personal data (Art. 15), rectification (Art. 16), erasure (Art. 17), restriction of processing (Art. 18), data portability (Art. 20), and to object to processing (Art. 21). Where processing is based on consent, you may withdraw that consent at any time.</p>
+      <p>To exercise these rights, contact us at contact@apolloniaspace.com.</p>
+ 
+      <h2>7. Right to Lodge a Complaint</h2>
+      <p>You have the right to lodge a complaint with a data protection supervisory authority if you believe that the processing of your personal data infringes the GDPR.</p>
+ 
+    </div>
+  </main>
+</Layout>
+<style>
+  .stars { position: fixed; inset: 0; pointer-events: none; }
+  .star { position: absolute; left: var(--x); top: var(--y); width: var(--size); height: var(--size); background: #ffffff; border-radius: 50%; opacity: 0; animation: twinkle 3s var(--delay) infinite ease-in-out; }
+  @keyframes twinkle { 0%, 100% { opacity: 0; } 50% { opacity: 0.8; } }
+ 
+  main {
+    min-height: 100vh;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 10rem 4rem 5rem;
+    position: relative;
+  }
+ 
+  h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #ffffff;
+    margin-bottom: 2.5rem;
+  }
+ 
+  h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+ 
+  .content p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.8;
+    margin-bottom: 0.75rem;
+  }
+ 
+  .updated {
+    font-size: 0.85rem !important;
+    color: rgba(255, 255, 255, 0.4) !important;
+    margin-bottom: 1.5rem;
+  }
+ 
+  @media (max-width: 768px) {
+    main { padding: 7rem 1.5rem 4rem; }
+    h1 { font-size: 1.7rem; margin-bottom: 2rem; }
+    h2 { font-size: 1.05rem; margin-top: 2rem; }
+    .content p { font-size: 0.95rem; }
+  }
+</style>
