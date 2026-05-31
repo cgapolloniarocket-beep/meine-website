@@ -15,7 +15,7 @@ import SiteHeader from '../components/SiteHeader.astro';
       ))}
     </div>
  
-    <SiteHeader />
+    <SiteHeader transition:persist />
  
     <div class="about-hero">
       <h1>ABOUT US</h1>
@@ -61,19 +61,28 @@ import SiteHeader from '../components/SiteHeader.astro';
 </Layout>
  
 <script>
-  const tabs = document.querySelectorAll('.tab');
-  const contents = document.querySelectorAll('.tab-content');
+  // Wrap in astro:page-load so it re-runs after every ViewTransition
+  function initTabs() {
+    const tabs = document.querySelectorAll<HTMLButtonElement>('.tab');
+    const contents = document.querySelectorAll<HTMLElement>('.tab-content');
  
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      contents.forEach(c => c.classList.add('hidden'));
+    tabs.forEach(tab => {
+      // Clone to drop any old listeners
+      const fresh = tab.cloneNode(true) as HTMLButtonElement;
+      tab.parentNode?.replaceChild(fresh, tab);
  
-      tab.classList.add('active');
-      const target = tab.getAttribute('data-tab');
-      document.getElementById(target!)?.classList.remove('hidden');
+      fresh.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        contents.forEach(c => c.classList.add('hidden'));
+ 
+        fresh.classList.add('active');
+        const target = fresh.getAttribute('data-tab');
+        if (target) document.getElementById(target)?.classList.remove('hidden');
+      });
     });
-  });
+  }
+ 
+  document.addEventListener('astro:page-load', initTabs);
 </script>
  
 <style>
@@ -84,11 +93,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     overflow: hidden;
   }
  
-  .stars {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
+  .stars { position: absolute; inset: 0; pointer-events: none; }
  
   .star {
     position: absolute;
@@ -117,7 +122,6 @@ import SiteHeader from '../components/SiteHeader.astro';
     50% { opacity: 1; }
   }
  
-  /* ✅ Titel weiter nach oben: 12rem → 10rem */
   .about-hero {
     position: relative;
     z-index: 3;
@@ -126,7 +130,6 @@ import SiteHeader from '../components/SiteHeader.astro';
     margin: 0 auto;
   }
  
-  /* ✅ Identisch mit Podcast h1 */
   h1 {
     font-family: 'Barlow', sans-serif;
     font-size: clamp(2rem, 5vw, 4rem);
@@ -138,12 +141,11 @@ import SiteHeader from '../components/SiteHeader.astro';
     margin-bottom: 1.5rem;
   }
  
-  /* Tabs */
   .tabs {
     display: flex;
     gap: 0;
     margin-top: 0;
-    margin-bottom: 3rem; /* ✅ Abstand verkürzt: 4rem → 3rem */
+    margin-bottom: 3rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
  
@@ -163,30 +165,21 @@ import SiteHeader from '../components/SiteHeader.astro';
     transition: color 0.3s, border-color 0.3s;
   }
  
-  .tab:hover {
-    color: rgba(255, 255, 255, 0.8);
-  }
+  .tab:hover { color: rgba(255, 255, 255, 0.8); }
  
   .tab.active {
     color: #ffffff;
     border-bottom: 2px solid #42A5F5;
   }
  
-  /* Tab Content */
-  .tab-content {
-    animation: fadeIn 0.3s ease;
-  }
- 
-  .tab-content.hidden {
-    display: none;
-  }
+  .tab-content { animation: fadeIn 0.3s ease; }
+  .tab-content.hidden { display: none; }
  
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
   }
  
-  /* Team */
   .team-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -224,7 +217,6 @@ import SiteHeader from '../components/SiteHeader.astro';
     z-index: 1;
   }
  
-  /* Name Row with LinkedIn */
   .name-row {
     display: flex;
     align-items: center;
@@ -258,21 +250,9 @@ import SiteHeader from '../components/SiteHeader.astro';
     margin-top: 0.9rem;
   }
  
-  .linkedin-link:hover {
-    color: rgb(40, 145, 250);
-  }
+  .linkedin-link:hover { color: rgb(40, 145, 250); }
  
-  .member-bio {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.95rem;
-    color: rgba(255, 255, 255, 0.6);
-    line-height: 1.7;
-  }
- 
-  /* Mission */
-  .mission-content {
-    max-width: 700px;
-  }
+  .mission-content { max-width: 700px; }
  
   .mission-content h2 {
     font-family: 'Helvetica', Arial, sans-serif;
@@ -293,16 +273,8 @@ import SiteHeader from '../components/SiteHeader.astro';
   }
  
   @media (max-width: 768px) {
-    .about-hero {
-      padding: 8rem 2rem 4rem;
-    }
- 
-    .member-photo {
-      height: 300px;
-    }
- 
-    .member-card {
-      max-width: 100%;
-    }
+    .about-hero { padding: 8rem 2rem 4rem; }
+    .member-photo { height: 300px; }
+    .member-card { max-width: 100%; }
   }
 </style>

@@ -21,7 +21,7 @@ import SiteHeader from '../components/SiteHeader.astro';
       <div class="shooting-star"></div>
     </div>
  
-    <SiteHeader />
+    <SiteHeader transition:persist />
  
     <div class="hero-text">
       <h1>
@@ -97,11 +97,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     background-color: #050d1a;
   }
  
-  .stars {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
+  .stars { position: absolute; inset: 0; pointer-events: none; }
  
   .star {
     position: absolute;
@@ -130,13 +126,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     50% { opacity: 1; }
   }
  
-  .shooting-stars {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
-    z-index: 5;
-  }
+  .shooting-stars { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 5; }
  
   .shooting-star {
     position: absolute;
@@ -148,26 +138,9 @@ import SiteHeader from '../components/SiteHeader.astro';
     box-shadow: 0 0 12px 3px rgba(255, 255, 255, 0.5);
   }
  
-  .shooting-star:nth-child(1) {
-    top: 15%;
-    left: 60%;
-    transform: rotate(-35deg);
-    animation: shoot 3s 2s infinite;
-  }
- 
-  .shooting-star:nth-child(2) {
-    top: 35%;
-    left: 75%;
-    transform: rotate(-30deg);
-    animation: shoot 4s 5s infinite;
-  }
- 
-  .shooting-star:nth-child(3) {
-    top: 55%;
-    left: 45%;
-    transform: rotate(-40deg);
-    animation: shoot 5s 8s infinite;
-  }
+  .shooting-star:nth-child(1) { top: 15%; left: 60%; transform: rotate(-35deg); animation: shoot 3s 2s infinite; }
+  .shooting-star:nth-child(2) { top: 35%; left: 75%; transform: rotate(-30deg); animation: shoot 4s 5s infinite; }
+  .shooting-star:nth-child(3) { top: 55%; left: 45%; transform: rotate(-40deg); animation: shoot 5s 8s infinite; }
  
   @keyframes shoot {
     0% { opacity: 0; transform: translateX(0) translateY(0) rotate(-35deg); }
@@ -176,11 +149,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     100% { opacity: 0; }
   }
  
-  .hero-text {
-    padding: 10rem 4rem 0;
-    position: relative;
-    z-index: 3;
-  }
+  .hero-text { padding: 10rem 4rem 0; position: relative; z-index: 3; }
  
   h1 {
     font-family: 'Barlow', sans-serif;
@@ -205,10 +174,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     max-width: 45%;
   }
  
-  .subtitle:first-of-type {
-    margin-top: 1.5rem;
-    margin-bottom: 0;
-  }
+  .subtitle:first-of-type { margin-top: 1.5rem; margin-bottom: 0; }
  
   .featured-episode {
     position: absolute;
@@ -221,12 +187,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     flex-direction: column;
   }
  
-  .ep-image-link {
-    display: block;
-    flex: 1;
-    margin-bottom: 1rem;
-    text-decoration: none;
-  }
+  .ep-image-link { display: block; flex: 1; margin-bottom: 1rem; text-decoration: none; }
  
   .ep-image {
     width: 100%;
@@ -238,15 +199,9 @@ import SiteHeader from '../components/SiteHeader.astro';
     cursor: pointer;
   }
  
-  .ep-image:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.25);
-  }
+  .ep-image:hover { background: rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.25); }
  
-  .ep-content {
-    display: flex;
-    flex-direction: column;
-  }
+  .ep-content { display: flex; flex-direction: column; }
  
   .featured-label {
     font-family: 'Montserrat', sans-serif;
@@ -277,14 +232,9 @@ import SiteHeader from '../components/SiteHeader.astro';
     transition: color 0.3s;
   }
  
-  .view-ep:hover {
-    color: #42A5F5;
-  }
+  .view-ep:hover { color: #42A5F5; }
  
-  .ep-platforms {
-    display: flex;
-    gap: 0.75rem;
-  }
+  .ep-platforms { display: flex; gap: 0.75rem; }
  
   .platform-link {
     font-family: 'Barlow', sans-serif;
@@ -295,19 +245,11 @@ import SiteHeader from '../components/SiteHeader.astro';
     transition: color 0.3s;
   }
  
-  .platform-link:hover {
-    color: #ffffff;
-  }
+  .platform-link:hover { color: #ffffff; }
  
-  .page-two {
-    min-height: 100vh;
-    padding: 6rem 4rem;
-    background: #050d1a;
-  }
+  .page-two { min-height: 100vh; padding: 6rem 4rem; background: #050d1a; }
  
-  .sec-head {
-    margin-bottom: 3rem;
-  }
+  .sec-head { margin-bottom: 3rem; }
  
   .sec-head h2 {
     font-family: 'Barlow', sans-serif;
@@ -318,11 +260,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     letter-spacing: -0.02em;
   }
  
-  .ep-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-  }
+  .ep-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
  
   .ep-card {
     background: rgba(255, 255, 255, 0.08);
@@ -333,19 +271,11 @@ import SiteHeader from '../components/SiteHeader.astro';
     cursor: pointer;
   }
  
-  .ep-card:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.35);
-  }
+  .ep-card:hover { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.35); }
  
-  .ep-thumb {
-    height: 180px;
-    background: linear-gradient(135deg, #0a1628, #1a3a6e);
-  }
+  .ep-thumb { height: 180px; background: linear-gradient(135deg, #0a1628, #1a3a6e); }
  
-  .ep-card-body {
-    padding: 1.5rem;
-  }
+  .ep-card-body { padding: 1.5rem; }
  
   .meta {
     font-family: 'Montserrat', sans-serif;
@@ -366,85 +296,27 @@ import SiteHeader from '../components/SiteHeader.astro';
     margin-bottom: 0.75rem;
   }
  
-  .who {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.4);
-  }
+  .who { font-family: 'Montserrat', sans-serif; font-size: 0.85rem; color: rgba(255, 255, 255, 0.4); }
  
-  /* ============ TABLET ============ */
   @media (max-width: 1024px) and (min-width: 769px) {
-    .subtitle {
-      max-width: 50%;
-    }
+    .subtitle { max-width: 50%; }
   }
  
-  /* ============ MOBILE ============ */
   @media (max-width: 768px) {
-    /* Feste Höhe + overflow aufheben, sonst wird Featured Episode abgeschnitten */
-    .page-one {
-      height: auto;
-      min-height: 100vh;
-      overflow: visible;
-      padding-bottom: 3rem;
-    }
- 
-    .hero-text {
-      padding: 7rem 1.5rem 0;
-    }
- 
-    h1 {
-      font-size: 2.4rem;
-      line-height: 1.05;
-    }
- 
-    /* Untertitel über volle Breite statt nur 45% */
-    .subtitle {
-      max-width: 100%;
-      padding-left: 0;
-      font-size: 0.8rem;
-    }
- 
-    /* Featured Episode fließt jetzt unter den Text */
-    .featured-episode {
-      position: relative;
-      top: auto;
-      bottom: auto;
-      right: auto;
-      left: auto;
-      margin: 2.5rem 1.5rem 0;
-    }
- 
-    .ep-image {
-      height: 220px;
-      flex: none;
-    }
- 
-    .ep-grid {
-      grid-template-columns: 1fr;
-    }
- 
-    .page-two {
-      padding: 4rem 1.5rem;
-      min-height: auto;
-    }
+    .page-one { height: auto; min-height: 100vh; overflow: visible; padding-bottom: 3rem; }
+    .hero-text { padding: 7rem 1.5rem 0; }
+    h1 { font-size: 2.4rem; line-height: 1.05; }
+    .subtitle { max-width: 100%; padding-left: 0; font-size: 0.8rem; }
+    .featured-episode { position: relative; top: auto; bottom: auto; right: auto; left: auto; margin: 2.5rem 1.5rem 0; }
+    .ep-image { height: 220px; flex: none; }
+    .ep-grid { grid-template-columns: 1fr; }
+    .page-two { padding: 4rem 1.5rem; min-height: auto; }
   }
  
   @media (max-width: 380px) {
-    .hero-text {
-      padding: 6.5rem 1.2rem 0;
-    }
- 
-    h1 {
-      font-size: 2rem;
-    }
- 
-    .featured-episode {
-      margin: 2rem 1.2rem 0;
-    }
- 
-    .page-two {
-      padding: 3rem 1.2rem;
-    }
+    .hero-text { padding: 6.5rem 1.2rem 0; }
+    h1 { font-size: 2rem; }
+    .featured-episode { margin: 2rem 1.2rem 0; }
+    .page-two { padding: 3rem 1.2rem; }
   }
 </style>

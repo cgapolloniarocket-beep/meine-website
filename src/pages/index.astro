@@ -21,7 +21,7 @@ import SiteHeader from '../components/SiteHeader.astro';
       })}
     </div>
  
-    <SiteHeader />
+    <SiteHeader transition:persist />
  
     <div class="hero-text">
       <h1>
@@ -33,15 +33,21 @@ import SiteHeader from '../components/SiteHeader.astro';
       </h1>
     </div>
  
-    <div class="globe-container" id="globe"></div>
+    <div class="globe-container" id="globe" transition:persist></div>
   </section>
 </Layout>
  
 <script>
   import * as THREE from 'three';
  
-  const container = document.getElementById('globe');
-  if (container) {
+  function initGlobe() {
+    const container = document.getElementById('globe');
+    if (!container) return;
+ 
+    // Skip if already initialized (because of transition:persist)
+    if (container.dataset.initialized === 'true') return;
+    container.dataset.initialized = 'true';
+ 
     container.style.opacity = '0';
  
     const R = 0.92;
@@ -54,7 +60,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     camera.position.z = 4.8;
  
     const sunLight = new THREE.DirectionalLight(0xfff4e6, 2.0);
-    sunLight.position.set(-2, 0.5, 3); 
+    sunLight.position.set(-2, 0.5, 3);
     scene.add(sunLight);
  
     const g = new THREE.Group();
@@ -71,7 +77,7 @@ import SiteHeader from '../components/SiteHeader.astro';
       normalMap: loader.load('https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/textures/planets/earth_normal_2048.jpg'),
       shininess: 10,
     });
-    
+ 
     const earth = new THREE.Mesh(new THREE.SphereGeometry(R, 96, 96), earthMat);
     g.add(earth);
  
@@ -92,57 +98,59 @@ import SiteHeader from '../components/SiteHeader.astro';
  
       function animate() {
         requestAnimationFrame(animate);
-        g.rotation.y += 0.0004; 
-        clouds.rotation.y += 0.0003; 
+        g.rotation.y += 0.0004;
+        clouds.rotation.y += 0.0003;
         renderer.render(scene, camera);
       }
       animate();
     };
   }
+ 
+  // Run on first load + after every ViewTransition
+  document.addEventListener('astro:page-load', initGlobe);
 </script>
  
 <style>
-  .page-one { 
-    position: relative; 
-    height: 100vh; 
-    overflow: hidden; 
-    background-color: #02050a; 
+  .page-one {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #050d1a; /* angeglichen an podcast/about */
   }
-  
+ 
   .stars { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
   .star { position: absolute; left: var(--x); top: var(--y); width: var(--size); height: var(--size); background: white; border-radius: 50%; opacity: var(--opacity); animation: twinkle var(--dur) infinite alternate; }
   @keyframes twinkle { from { opacity: 0.2; } to { opacity: 1; } }
  
-  .hero-text { 
-    position: relative; 
-    z-index: 3; 
-    pointer-events: none; 
+  .hero-text {
+    position: relative;
+    z-index: 3;
+    pointer-events: none;
     padding: 10rem 4rem 0;
   }
  
-  h1 { 
-    font-family: 'Barlow', sans-serif; 
-    font-size: clamp(2rem, 6vw, 5rem); 
-    font-weight: 800; 
-    line-height: 0.95; 
-    color: #e0e0e0; 
-    letter-spacing: -0.02em; 
+  h1 {
+    font-family: 'Barlow', sans-serif;
+    font-size: clamp(2rem, 6vw, 5rem);
+    font-weight: 800;
+    line-height: 0.95;
+    color: #e0e0e0;
+    letter-spacing: -0.02em;
     text-transform: uppercase;
     margin: 0;
   }
-  
-  .globe-container { 
-    position: absolute; 
-    top: 50%; 
-    left: 80%; 
-    width: 950px; 
-    height: 950px; 
+ 
+  .globe-container {
+    position: absolute;
+    top: 50%;
+    left: 80%;
+    width: 950px;
+    height: 950px;
     z-index: 2;
-    pointer-events: none; 
-    transform: translate(-50%, -45%); 
+    pointer-events: none;
+    transform: translate(-50%, -45%);
   }
  
-  /* ============ MOBILE STYLES ============ */
   @media (max-width: 768px) {
     .hero-text {
       padding: 8.5rem 1.5rem 0 2.5rem;
@@ -154,11 +162,11 @@ import SiteHeader from '../components/SiteHeader.astro';
       line-height: 1.1;
     }
  
-    .globe-container { 
-      left: 78%; 
+    .globe-container {
+      left: 78%;
       top: 28%;
-      width: 320px; 
-      height: 320px; 
+      width: 320px;
+      height: 320px;
       transform: translate(-50%, -50%);
       opacity: 0.9;
     }
@@ -174,11 +182,12 @@ import SiteHeader from '../components/SiteHeader.astro';
       font-size: 1.6rem;
     }
  
-    .globe-container { 
+    .globe-container {
       left: 80%;
       top: 25%;
-      width: 260px; 
-      height: 260px; 
+      width: 260px;
+      height: 260px;
     }
   }
 </style>
+ 
