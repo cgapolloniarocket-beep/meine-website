@@ -24,6 +24,9 @@ const {
  
     <title>{title}</title>
  
+    <!-- Preload logo so it doesn't pop in after stars start twinkling -->
+    <link rel="preload" as="image" href="/apollonia_logo_white_black.png" fetchpriority="high" />
+ 
     <!-- Fonts: preconnect + preload -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -58,7 +61,7 @@ const {
   </head>
   <body>
     <!-- Slow fade-in on every page navigation -->
-    <main transition:animate={fade({ duration: '0.6s' })}>
+    <main transition:animate={fade({ duration: '0.35s' })}>
       <slot />
     </main>
     <SiteFooter />
@@ -98,3 +101,4 @@ const {
     flex: 1;
   }
 </style>
+ 
