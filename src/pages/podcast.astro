@@ -6,15 +6,6 @@ import SiteHeader from '../components/SiteHeader.astro';
 <Layout title="Apollonia – Podcast">
  
   <section class="page-one">
-    <div class="stars">
-      {Array.from({length: 30}).map((_, i) => (
-        <div class="star" style={`--x: ${Math.random() * 100}%; --y: ${Math.random() * 100}%; --delay: ${Math.random() * 4}s; --size: ${Math.random() * 2 + 1}px;`} />
-      ))}
-      {Array.from({length: 8}).map((_, i) => (
-        <div class="star bright" style={`--x: ${Math.random() * 100}%; --y: ${Math.random() * 100}%; --delay: ${Math.random() * 4}s; --size: ${Math.random() * 3 + 2}px;`} />
-      ))}
-    </div>
- 
     <div class="shooting-stars">
       <div class="shooting-star"></div>
       <div class="shooting-star"></div>
@@ -94,36 +85,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     position: relative;
     height: 100vh;
     overflow: hidden;
-    background-color: #050d1a;
-  }
- 
-  .stars { position: absolute; inset: 0; pointer-events: none; }
- 
-  .star {
-    position: absolute;
-    left: var(--x);
-    top: var(--y);
-    width: var(--size);
-    height: var(--size);
-    background: #ffffff;
-    border-radius: 50%;
-    opacity: 0;
-    animation: twinkle 3s var(--delay) infinite ease-in-out;
-  }
- 
-  .star.bright {
-    box-shadow: 0 0 10px 4px rgba(255, 255, 255, 0.8);
-    animation: twinkleBright 6s var(--delay) infinite ease-in-out;
-  }
- 
-  @keyframes twinkle {
-    0%, 100% { opacity: 0; }
-    50% { opacity: 0.8; }
-  }
- 
-  @keyframes twinkleBright {
-    0%, 100% { opacity: 0; }
-    50% { opacity: 1; }
+    background-color: transparent;
   }
  
   .shooting-stars { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 5; }
@@ -247,7 +209,7 @@ import SiteHeader from '../components/SiteHeader.astro';
  
   .platform-link:hover { color: #ffffff; }
  
-  .page-two { min-height: 100vh; padding: 6rem 4rem; background: #050d1a; }
+  .page-two { min-height: 100vh; padding: 6rem 4rem; background: transparent; }
  
   .sec-head { margin-bottom: 3rem; }
  

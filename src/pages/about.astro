@@ -2,34 +2,33 @@
 import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 ---
- 
+
 <Layout title="Apollonia – About Us">
- 
+
   <section class="page-one">
-    <div class="stars">
-      {Array.from({length: 30}).map((_, i) => (
-        <div class="star" style={`--x: ${Math.random() * 100}%; --y: ${Math.random() * 100}%; --delay: ${Math.random() * 4}s; --size: ${Math.random() * 2 + 1}px;`} />
-      ))}
-      {Array.from({length: 8}).map((_, i) => (
-        <div class="star bright" style={`--x: ${Math.random() * 100}%; --y: ${Math.random() * 100}%; --delay: ${Math.random() * 4}s; --size: ${Math.random() * 3 + 2}px;`} />
-      ))}
-    </div>
- 
     <SiteHeader transition:persist />
- 
+
     <div class="about-hero">
       <h1>ABOUT US</h1>
- 
+
       <div class="tabs">
         <button class="tab active" data-tab="team">Team</button>
         <button class="tab" data-tab="mission">Mission</button>
       </div>
- 
+
       <div class="tab-content" id="team">
         <div class="team-grid">
           <div class="member-card">
             <div class="member-photo">
-              <img src="/caspar-gross.png" alt="Caspar Gross" />
+              <img
+                src="/caspar-gross.png"
+                alt="Caspar Gross"
+                width="360"
+                height="340"
+                loading="eager"
+                fetchpriority="high"
+                decoding="async"
+              />
             </div>
             <div class="member-info">
               <div class="name-row">
@@ -47,7 +46,7 @@ import SiteHeader from '../components/SiteHeader.astro';
           </div>
         </div>
       </div>
- 
+
       <div class="tab-content hidden" id="mission">
         <div class="mission-content">
           <h2>Our Mission</h2>
@@ -57,71 +56,42 @@ import SiteHeader from '../components/SiteHeader.astro';
       </div>
     </div>
   </section>
- 
+
 </Layout>
- 
+
 <script>
   // Wrap in astro:page-load so it re-runs after every ViewTransition
   function initTabs() {
     const tabs = document.querySelectorAll<HTMLButtonElement>('.tab');
     const contents = document.querySelectorAll<HTMLElement>('.tab-content');
- 
+
     tabs.forEach(tab => {
       // Clone to drop any old listeners
       const fresh = tab.cloneNode(true) as HTMLButtonElement;
       tab.parentNode?.replaceChild(fresh, tab);
- 
+
       fresh.addEventListener('click', () => {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         contents.forEach(c => c.classList.add('hidden'));
- 
+
         fresh.classList.add('active');
         const target = fresh.getAttribute('data-tab');
         if (target) document.getElementById(target)?.classList.remove('hidden');
       });
     });
   }
- 
+
   document.addEventListener('astro:page-load', initTabs);
 </script>
- 
+
 <style>
   .page-one {
     position: relative;
     min-height: 100vh;
-    background-color: #050d1a;
+    background-color: transparent;
     overflow: hidden;
   }
- 
-  .stars { position: absolute; inset: 0; pointer-events: none; }
- 
-  .star {
-    position: absolute;
-    left: var(--x);
-    top: var(--y);
-    width: var(--size);
-    height: var(--size);
-    background: #ffffff;
-    border-radius: 50%;
-    opacity: 0;
-    animation: twinkle 3s var(--delay) infinite ease-in-out;
-  }
- 
-  .star.bright {
-    box-shadow: 0 0 10px 4px rgba(255, 255, 255, 0.8);
-    animation: twinkleBright 6s var(--delay) infinite ease-in-out;
-  }
- 
-  @keyframes twinkle {
-    0%, 100% { opacity: 0; }
-    50% { opacity: 0.8; }
-  }
- 
-  @keyframes twinkleBright {
-    0%, 100% { opacity: 0; }
-    50% { opacity: 1; }
-  }
- 
+
   .about-hero {
     position: relative;
     z-index: 3;
@@ -129,7 +99,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     max-width: 1400px;
     margin: 0 auto;
   }
- 
+
   h1 {
     font-family: 'Barlow', sans-serif;
     font-size: clamp(2rem, 5vw, 4rem);
@@ -140,7 +110,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     text-transform: uppercase;
     margin-bottom: 1.5rem;
   }
- 
+
   .tabs {
     display: flex;
     gap: 0;
@@ -148,7 +118,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     margin-bottom: 3rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
- 
+
   .tab {
     font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
@@ -164,28 +134,23 @@ import SiteHeader from '../components/SiteHeader.astro';
     margin-bottom: -1px;
     transition: color 0.3s, border-color 0.3s;
   }
- 
+
   .tab:hover { color: rgba(255, 255, 255, 0.8); }
- 
+
   .tab.active {
     color: #ffffff;
     border-bottom: 2px solid #42A5F5;
   }
- 
-  .tab-content { animation: fadeIn 0.3s ease; }
+
+  .tab-content { /* no internal animation — page-level transition handles entrance */ }
   .tab-content.hidden { display: none; }
- 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
- 
+
   .team-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 3rem;
   }
- 
+
   .member-card {
     display: flex;
     flex-direction: column;
@@ -195,34 +160,35 @@ import SiteHeader from '../components/SiteHeader.astro';
     border: 1px solid rgba(255, 255, 255, 0.08);
     max-width: 360px;
   }
- 
+
   .member-photo {
     width: 100%;
     height: 340px;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.05);
+    background: linear-gradient(135deg, #0a1628, #1a3a6e); /* Placeholder while image loads */
   }
- 
+
   .member-photo img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: top center;
+    display: block;
   }
- 
+
   .member-info {
     padding: 1rem 1.5rem 1.2rem;
     margin-top: -1.5rem;
     position: relative;
     z-index: 1;
   }
- 
+
   .name-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
- 
+
   .member-info h3 {
     font-family: 'Helvetica', Arial, sans-serif;
     font-size: 1.5rem;
@@ -231,7 +197,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     letter-spacing: 0.05em;
     margin-bottom: 0.25rem;
   }
- 
+
   .member-role {
     font-family: 'Montserrat', sans-serif;
     font-size: 0.8rem;
@@ -241,7 +207,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     text-transform: uppercase;
     display: block;
   }
- 
+
   .linkedin-link {
     color: #ffffff;
     transition: color 0.3s;
@@ -249,11 +215,11 @@ import SiteHeader from '../components/SiteHeader.astro';
     align-items: center;
     margin-top: 0.9rem;
   }
- 
+
   .linkedin-link:hover { color: rgb(40, 145, 250); }
- 
+
   .mission-content { max-width: 700px; }
- 
+
   .mission-content h2 {
     font-family: 'Helvetica', Arial, sans-serif;
     font-size: clamp(2rem, 4vw, 3rem);
@@ -263,7 +229,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     letter-spacing: 0.15em;
     margin-bottom: 2rem;
   }
- 
+
   .mission-content p {
     font-family: 'Montserrat', sans-serif;
     font-size: 1.1rem;
@@ -271,7 +237,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     line-height: 1.8;
     margin-bottom: 1.5rem;
   }
- 
+
   @media (max-width: 768px) {
     .about-hero { padding: 8rem 2rem 4rem; }
     .member-photo { height: 300px; }

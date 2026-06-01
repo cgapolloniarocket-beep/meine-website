@@ -1,18 +1,31 @@
 ---
-import { ClientRouter, fade } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import SiteFooter from '../components/SiteFooter.astro';
- 
+
+// Custom transition: old page exits instantly, new page fades in smoothly.
+// Feels elegant without making users wait through a crossfade.
+const smoothFadeIn = {
+  forwards: {
+    old: { name: 'instantOut', duration: '0s', easing: 'linear' },
+    new: { name: 'smoothIn', duration: '0.4s', easing: 'ease-out' },
+  },
+  backwards: {
+    old: { name: 'instantOut', duration: '0s', easing: 'linear' },
+    new: { name: 'smoothIn', duration: '0.4s', easing: 'ease-out' },
+  },
+};
+
 interface Props {
   title: string;
   description?: string;
 }
- 
+
 const {
   title,
   description = 'Podcasts for the space industry of tomorrow — unfiltered conversations with the leaders driving the new space economy.',
 } = Astro.props;
 ---
- 
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -21,12 +34,12 @@ const {
     <meta name="description" content={description} />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta name="robots" content="index, follow" />
- 
+
     <title>{title}</title>
- 
+
     <!-- Preload logo so it doesn't pop in after stars start twinkling -->
     <link rel="preload" as="image" href="/apollonia_logo_white_black.png" fetchpriority="high" />
- 
+
     <!-- Fonts: preconnect + preload -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -42,42 +55,57 @@ const {
         href="https://fonts.googleapis.com/css2?family=Barlow:wght@800&family=Montserrat:wght@300;400;500;600;700&display=swap"
       />
     </noscript>
- 
+
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:site_name" content="Apollonia Space" />
- 
+
     <!-- X / Twitter card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@ApolloniaSpace" />
     <meta name="twitter:creator" content="@ApolloniaSpace" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
- 
+
     <!-- SPA-like page transitions -->
     <ClientRouter />
   </head>
   <body>
-    <!-- Slow fade-in on every page navigation -->
-    <main transition:animate={fade({ duration: '0.25s' })}>
+    <!-- Persistent star field: rendered once, kept across all navigations.
+         Eliminates jank from re-generating + re-animating stars on every page. -->
+    <div class="global-stars" transition:persist="global-stars">
+      {Array.from({ length: 60 }).map(() => {
+        const size = (Math.random() * 2 + 1).toFixed(2);
+        const delay = (Math.random() * 4).toFixed(2);
+        return (
+          <div
+            class="global-star"
+            style={`--x: ${Math.random() * 100}%; --y: ${Math.random() * 100}%; --size: ${size}px; --delay: ${delay}s;`}
+          />
+        );
+      })}
+    </div>
+
+    <!-- Custom fade-in: snappy entrance, no draggy crossfade -->
+    <main transition:animate={smoothFadeIn}>
       <slot />
     </main>
     <SiteFooter />
   </body>
 </html>
- 
+
 <style is:global>
   * {
     box-sizing: border-box;
   }
- 
+
   html {
     -webkit-text-size-adjust: 100%;
     font-family: 'Montserrat', sans-serif;
   }
- 
+
   body {
     display: flex;
     flex-direction: column;
@@ -89,16 +117,91 @@ const {
     -moz-osx-font-smoothing: grayscale;
     /* Fade-in beim ersten Seitenaufruf (Direktlink / Reload).
        Läuft nicht bei ClientRouter-Navigation, weil <body> dort persistiert. */
-    animation: initialFadeIn 0.6s ease-out;
+    animation: initialFadeIn 0.4s ease-out;
   }
- 
+
   @keyframes initialFadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
   }
- 
+
+  /* === Text entrance animation: fade up from below ===
+     Runs on first load AND after every ClientRouter navigation,
+     because fresh DOM elements always start their CSS animations. */
+  @keyframes textFadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  h1,
+  h2,
+  .subtitle,
+  .featured-label {
+    animation: textFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  }
+
+  /* Staggered cascade — h1 first, then subtitle elements */
+  h1 { animation-delay: 0.1s; }
+  h2 { animation-delay: 0.15s; }
+  .featured-label { animation-delay: 0.25s; }
+  .subtitle { animation-delay: 0.3s; }
+  .subtitle + .subtitle { animation-delay: 0.45s; }
+
+  /* Respect user preference for reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    h1, h2, .subtitle, .featured-label {
+      animation: none;
+    }
+  }
+
   main {
     flex: 1;
+    /* Isolates the page from outside layout/paint work during transitions */
+    contain: layout paint style;
+  }
+
+  /* Keyframes for the custom page transition.
+     Must be global so they apply to ::view-transition-* pseudo-elements. */
+  @keyframes smoothIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes instantOut {
+    from, to { opacity: 0; }
+  }
+
+  /* === Persistent global star field === */
+  .global-stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    /* Isolate paint/composite to its own layer for smooth GPU rendering */
+    contain: layout paint style;
+    transform: translateZ(0);
+  }
+
+  .global-star {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--size);
+    height: var(--size);
+    background: #ffffff;
+    border-radius: 50%;
+    opacity: 0;
+    animation: globalTwinkle 3s var(--delay) infinite ease-in-out;
+  }
+
+  @keyframes globalTwinkle {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 0.8; }
   }
 </style>
- 
