@@ -26,6 +26,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     rafId: number | null;
     g: any | null;
     clouds: any | null;
+    stars: any | null;
     renderer: any | null;
     scene: any | null;
     camera: any | null;
@@ -36,17 +37,32 @@ import SiteHeader from '../components/SiteHeader.astro';
     rafId: null,
     g: null,
     clouds: null,
+    stars: null,
     renderer: null,
     scene: null,
     camera: null,
   });
 
+  // Zeit-Variable für die Blinzel-Animation
+  let clockTime = 0;
+
   function startAnimation() {
     if (state.rafId !== null) return;
     const tick = () => {
       state.rafId = requestAnimationFrame(tick);
+      
+      // Rotationen
       if (state.g) state.g.rotation.y += 0.0004;
       if (state.clouds) state.clouds.rotation.y += 0.0003;
+      if (state.stars) {
+        state.stars.rotation.y += 0.00002; // Sehr langsame Rotation
+        
+        // NEU: Sanftes, langsames Blinzeln über Sinus-Welle steuern
+        clockTime += 0.005; // Je kleiner der Wert, desto langsamer das Blinzeln
+        // Pendelt die Opacity sanft zwischen 0.2 und 0.5 hin und her
+        state.stars.material.opacity = 0.35 + Math.sin(clockTime) * 0.15;
+      }
+      
       if (state.renderer && state.scene && state.camera) {
         state.renderer.render(state.scene, state.camera);
       }
@@ -87,14 +103,50 @@ import SiteHeader from '../components/SiteHeader.astro';
     state.camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
     state.camera.position.z = 4.8;
 
-    // Haupt-Sonnenlicht
     const sunLight = new THREE.DirectionalLight(0xffffff, 3.0);
     sunLight.position.set(-1.8, 1.2, 3.2);
     state.scene.add(sunLight);
 
-    // ÄNDERUNG 1: Neutrales, dunkles Grau statt Navy-Blau für das Umgebungslicht
     const ambientLight = new THREE.AmbientLight(0x111111, 1.2);
     state.scene.add(ambientLight);
+
+    // Sternenfeld Generierung
+    const starsGeometry = new THREE.BufferGeometry();
+    const starsCount = 1200; 
+    const starPositions = new Float32Array(starsCount * 3);
+    const starColors = new Float32Array(starsCount * 3); 
+
+    for (let i = 0; i < starsCount * 3; i += 3) {
+      const radius = 25 + Math.random() * 20; 
+      const u = Math.random();
+      const v = Math.random();
+      const theta = u * 2.0 * Math.PI;
+      const phi = Math.acos(2.0 * v - 1.0);
+      
+      starPositions[i] = radius * Math.sin(phi) * Math.cos(theta);
+      starPositions[i + 1] = radius * Math.sin(phi) * Math.sin(theta);
+      starPositions[i + 2] = radius * Math.cos(phi);
+
+      const brightness = 0.5 + Math.random() * 0.5; 
+      starColors[i] = brightness;       
+      starColors[i + 1] = brightness * 0.95; 
+      starColors[i + 2] = brightness * 1.0;  
+    }
+
+    starsGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+    starsGeometry.setAttribute('color', new THREE.BufferAttribute(starColors, 3));
+
+    const starsMaterial = new THREE.PointsMaterial({
+      size: 0.012,             
+      sizeAttenuation: true,
+      vertexColors: true,      
+      transparent: true,
+      opacity: 0.4, // Start-Wert, wird im Loop animiert
+      blending: THREE.AdditiveBlending
+    });
+
+    state.stars = new THREE.Points(starsGeometry, starsMaterial);
+    state.scene.add(state.stars);
 
     state.g = new THREE.Group();
     state.g.rotation.x = 0.12;
@@ -116,8 +168,8 @@ import SiteHeader from '../components/SiteHeader.astro';
       specularMap: textureSpecular,
       normalMap: textureNormal,
       normalScale: new THREE.Vector2(0.9, 0.9),
-      shininess: 65,                                  
-      specular: new THREE.Color(0x777777)    
+      shininess: 100,                        
+      specular: new THREE.Color(0x333333)    // Seidenmatter Glanz
     });
 
     const earth = new THREE.Mesh(new THREE.SphereGeometry(R, 96, 96), earthMat);
@@ -165,7 +217,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     position: relative;
     height: 100vh;
     overflow: hidden;
-    background-color: #000000; /* ÄNDERUNG 2: Festes Tiefschwarz statt transparent */
+    background-color: #000000; 
   }
 
   .hero-text {
