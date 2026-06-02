@@ -22,16 +22,13 @@ import SiteHeader from '../components/SiteHeader.astro';
 </Layout>
 
 <script>
-  import * as THREE from 'three';
-
-  // Persist globe state across navigations so we can pause/resume cleanly
   type GlobeState = {
     rafId: number | null;
-    g: THREE.Group | null;
-    clouds: THREE.Mesh | null;
-    renderer: THREE.WebGLRenderer | null;
-    scene: THREE.Scene | null;
-    camera: THREE.PerspectiveCamera | null;
+    g: any | null;
+    clouds: any | null;
+    renderer: any | null;
+    scene: any | null;
+    camera: any | null;
   };
 
   const w = window as any;
@@ -45,7 +42,7 @@ import SiteHeader from '../components/SiteHeader.astro';
   });
 
   function startAnimation() {
-    if (state.rafId !== null) return; // already running
+    if (state.rafId !== null) return;
     const tick = () => {
       state.rafId = requestAnimationFrame(tick);
       if (state.g) state.g.rotation.y += 0.0004;
@@ -64,11 +61,10 @@ import SiteHeader from '../components/SiteHeader.astro';
     }
   }
 
-  function initGlobe() {
+  async function initGlobe() {
     const container = document.getElementById('globe');
     if (!container) return;
 
-    // Already initialized — just resume animation
     if (container.dataset.initialized === 'true') {
       startAnimation();
       return;
@@ -76,57 +72,80 @@ import SiteHeader from '../components/SiteHeader.astro';
     container.dataset.initialized = 'true';
     container.style.opacity = '0';
 
+    const THREE = await import('three');
+
     const R = 0.92;
     state.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     state.renderer.setSize(container.clientWidth, container.clientHeight);
+    
+    state.renderer.outputColorSpace = THREE.SRGBColorSpace;
+    state.renderer.toneMapping = THREE.ACESFilmicToneMapping; 
+    state.renderer.toneMappingExposure = 1.4; 
     container.appendChild(state.renderer.domElement);
 
     state.scene = new THREE.Scene();
     state.camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
     state.camera.position.z = 4.8;
 
-    const sunLight = new THREE.DirectionalLight(0xfff4e6, 2.0);
-    sunLight.position.set(-2, 0.5, 3);
+    // Haupt-Sonnenlicht
+    const sunLight = new THREE.DirectionalLight(0xffffff, 3.0);
+    sunLight.position.set(-1.8, 1.2, 3.2);
     state.scene.add(sunLight);
 
+    // BLAULICH-TUNING: Höheres, bläuliches Umgebungslicht macht die Ozeane insgesamt heller
+    const ambientLight = new THREE.AmbientLight(0x1a243a, 1.2);
+    state.scene.add(ambientLight);
+
     state.g = new THREE.Group();
-    state.g.rotation.x = 0.1;
-    state.g.rotation.y = 4.0;
+    state.g.rotation.x = 0.12;
+    state.g.rotation.y = 3.6; 
     state.scene.add(state.g);
 
     const manager = new THREE.LoadingManager();
     const loader = new THREE.TextureLoader(manager);
 
+    const textureMap = loader.load('/assets/earth_atmos_2048.jpg');
+    const textureSpecular = loader.load('/assets/earth_specular_2048.jpg');
+    const textureNormal = loader.load('/assets/earth_normal_2048.jpg');
+    const cloudTexture = loader.load('/assets/earth_clouds_2048.png');
+
+    textureMap.colorSpace = THREE.SRGBColorSpace;
+
+    // Erden-Material mit ausgewogenem, sanftem Glanz
     const earthMat = new THREE.MeshPhongMaterial({
-      map: loader.load('https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/textures/planets/earth_atmos_2048.jpg'),
-      specularMap: loader.load('https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/textures/planets/earth_specular_2048.jpg'),
-      normalMap: loader.load('https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/textures/planets/earth_normal_2048.jpg'),
-      shininess: 10,
+      map: textureMap,
+      specularMap: textureSpecular,
+      normalMap: textureNormal,
+      normalScale: new THREE.Vector2(0.9, 0.9),
+      shininess: 65,                         
+      specular: new THREE.Color(0x777777)    // Behält den gedimmten Reflex bei
     });
 
     const earth = new THREE.Mesh(new THREE.SphereGeometry(R, 96, 96), earthMat);
     state.g.add(earth);
 
     state.clouds = new THREE.Mesh(
-      new THREE.SphereGeometry(R + 0.005, 96, 96),
+      new THREE.SphereGeometry(R + 0.006, 96, 96),
       new THREE.MeshPhongMaterial({
-        map: loader.load('https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/textures/planets/earth_clouds_2048.png'),
+        map: cloudTexture,
         transparent: true,
-        opacity: 0.7,
+        opacity: 0.75,
         depthWrite: false,
+        blending: THREE.AdditiveBlending 
       })
     );
     state.g.add(state.clouds);
 
     manager.onLoad = () => {
-      container.style.transition = 'opacity 2.5s';
+      earthMat.needsUpdate = true;
+      if (state.clouds) (state.clouds.material as any).needsUpdate = true;
+      
+      container.style.transition = 'opacity 1.8s ease-out';
       container.style.opacity = '1';
       startAnimation();
     };
   }
 
-  // Run on first load + after every ViewTransition.
-  // Critical: stop animation when leaving home so it doesn't fight the transition.
   document.addEventListener('astro:page-load', () => {
     if (window.location.pathname === '/') {
       initGlobe();
@@ -135,7 +154,6 @@ import SiteHeader from '../components/SiteHeader.astro';
     }
   });
 
-  // Belt-and-suspenders: also stop right before leaving home
   document.addEventListener('astro:before-swap', () => {
     if (window.location.pathname === '/') {
       stopAnimation();
@@ -148,7 +166,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     position: relative;
     height: 100vh;
     overflow: hidden;
-    background-color: transparent; /* global stars shine through */
+    background-color: transparent;
   }
 
   .hero-text {
