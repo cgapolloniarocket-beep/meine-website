@@ -1,211 +1,221 @@
 ---
-import { ClientRouter } from 'astro:transitions';
-import SiteFooter from '../components/SiteFooter.astro';
-
-// Custom transition: old page exits instantly, new page fades in smoothly.
-// Feels elegant without making users wait through a crossfade.
-const smoothFadeIn = {
-  forwards: {
-    old: { name: 'instantOut', duration: '0s', easing: 'linear' },
-    new: { name: 'smoothIn', duration: '0.4s', easing: 'ease-out' },
-  },
-  backwards: {
-    old: { name: 'instantOut', duration: '0s', easing: 'linear' },
-    new: { name: 'smoothIn', duration: '0.4s', easing: 'ease-out' },
-  },
-};
-
-interface Props {
-  title: string;
-  description?: string;
-}
-
-const {
-  title,
-  description = 'Podcasts for the space industry of tomorrow — unfiltered conversations with the leaders driving the new space economy.',
-} = Astro.props;
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description} />
-    <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <meta name="robots" content="index, follow" />
+<Layout title="Apollonia Space – Podcasts for the Space Industry of Tomorrow">
+  <section class="page-one">
+    <SiteHeader transition:persist />
 
-    <title>{title}</title>
-
-    <!-- Favicon (browser tab icon) -->
-    <link rel="icon" type="image/png" href="/apollonia_logo_white_black.png" />
-    <link rel="apple-touch-icon" href="/apollonia_logo_white_black.png" />
-
-    <!-- Preload logo so it doesn't pop in after stars start twinkling -->
-    <link rel="preload" as="image" href="/apollonia_logo_white_black.png" fetchpriority="high" />
-
-    <!-- Fonts: preconnect + preload -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Barlow:wght@800&family=Montserrat:wght@300;400;500;600;700&display=swap"
-      onload="this.onload=null;this.rel='stylesheet'"
-    />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Barlow:wght@800&family=Montserrat:wght@300;400;500;600;700&display=swap"
-      />
-    </noscript>
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:site_name" content="Apollonia Space" />
-
-    <!-- X / Twitter card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@ApolloniaSpace" />
-    <meta name="twitter:creator" content="@ApolloniaSpace" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-
-    <!-- SPA-like page transitions -->
-    <ClientRouter />
-  </head>
-  <body>
-    <!-- Persistent star field: rendered once, kept across all navigations.
-         Eliminates jank from re-generating + re-animating stars on every page. -->
-    <div class="global-stars" transition:persist="global-stars">
-      {Array.from({ length: 60 }).map(() => {
-        const size = (Math.random() * 2 + 1).toFixed(2);
-        const delay = (Math.random() * 4).toFixed(2);
-        return (
-          <div
-            class="global-star"
-            style={`--x: ${Math.random() * 100}%; --y: ${Math.random() * 100}%; --size: ${size}px; --delay: ${delay}s;`}
-          />
-        );
-      })}
+    <div class="hero-text">
+      <h1>
+        ENGINEERED
+        <br />
+        ON EARTH.
+        <br />
+        BUILT FOR SPACE.
+      </h1>
     </div>
 
-    <!-- Custom fade-in: snappy entrance, no draggy crossfade -->
-    <main transition:animate={smoothFadeIn}>
-      <slot />
-    </main>
-    <SiteFooter />
-  </body>
-</html>
+    <div class="globe-container" id="globe" transition:persist></div>
+  </section>
+</Layout>
 
-<style is:global>
-  * {
-    box-sizing: border-box;
+<script>
+  import * as THREE from 'three';
+
+  // Persist globe state across navigations so we can pause/resume cleanly
+  type GlobeState = {
+    rafId: number | null;
+    g: THREE.Group | null;
+    clouds: THREE.Mesh | null;
+    renderer: THREE.WebGLRenderer | null;
+    scene: THREE.Scene | null;
+    camera: THREE.PerspectiveCamera | null;
+  };
+
+  const w = window as any;
+  const state: GlobeState = (w.__globeState ||= {
+    rafId: null,
+    g: null,
+    clouds: null,
+    renderer: null,
+    scene: null,
+    camera: null,
+  });
+
+  function startAnimation() {
+    if (state.rafId !== null) return; // already running
+    const tick = () => {
+      state.rafId = requestAnimationFrame(tick);
+      if (state.g) state.g.rotation.y += 0.0004;
+      if (state.clouds) state.clouds.rotation.y += 0.0003;
+      if (state.renderer && state.scene && state.camera) {
+        state.renderer.render(state.scene, state.camera);
+      }
+    };
+    tick();
   }
 
-  html {
-    -webkit-text-size-adjust: 100%;
-    font-family: 'Montserrat', sans-serif;
-  }
-
-  body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    margin: 0;
-    background: #050d1a;
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    /* Fade-in beim ersten Seitenaufruf (Direktlink / Reload).
-       Läuft nicht bei ClientRouter-Navigation, weil <body> dort persistiert. */
-    animation: initialFadeIn 0.4s ease-out;
-  }
-
-  @keyframes initialFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  /* === Text entrance animation: fade up from below ===
-     Runs on first load AND after every ClientRouter navigation,
-     because fresh DOM elements always start their CSS animations. */
-  @keyframes textFadeUp {
-    from {
-      opacity: 0;
-      transform: translateY(24px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
+  function stopAnimation() {
+    if (state.rafId !== null) {
+      cancelAnimationFrame(state.rafId);
+      state.rafId = null;
     }
   }
 
-  h1,
-  h2,
-  .subtitle,
-  .featured-label {
-    animation: textFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) backwards;
-  }
+  function initGlobe() {
+    const container = document.getElementById('globe');
+    if (!container) return;
 
-  /* Staggered cascade — h1 first, then subtitle elements */
-  h1 { animation-delay: 0.1s; }
-  h2 { animation-delay: 0.15s; }
-  .featured-label { animation-delay: 0.25s; }
-  .subtitle { animation-delay: 0.3s; }
-  .subtitle + .subtitle { animation-delay: 0.45s; }
-
-  /* Respect user preference for reduced motion */
-  @media (prefers-reduced-motion: reduce) {
-    h1, h2, .subtitle, .featured-label {
-      animation: none;
+    // Already initialized — just resume animation
+    if (container.dataset.initialized === 'true') {
+      startAnimation();
+      return;
     }
+    container.dataset.initialized = 'true';
+    container.style.opacity = '0';
+
+    const R = 0.92;
+    state.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    state.renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(state.renderer.domElement);
+
+    state.scene = new THREE.Scene();
+    state.camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+    state.camera.position.z = 4.8;
+
+    const sunLight = new THREE.DirectionalLight(0xfff4e6, 2.0);
+    sunLight.position.set(-2, 0.5, 3);
+    state.scene.add(sunLight);
+
+    state.g = new THREE.Group();
+    state.g.rotation.x = 0.1;
+    state.g.rotation.y = 4.0;
+    state.scene.add(state.g);
+
+    const manager = new THREE.LoadingManager();
+    const loader = new THREE.TextureLoader(manager);
+
+    const earthMat = new THREE.MeshPhongMaterial({
+      map: loader.load('https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/textures/planets/earth_atmos_2048.jpg'),
+      specularMap: loader.load('https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/textures/planets/earth_specular_2048.jpg'),
+      normalMap: loader.load('https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/textures/planets/earth_normal_2048.jpg'),
+      shininess: 10,
+    });
+
+    const earth = new THREE.Mesh(new THREE.SphereGeometry(R, 96, 96), earthMat);
+    state.g.add(earth);
+
+    state.clouds = new THREE.Mesh(
+      new THREE.SphereGeometry(R + 0.005, 96, 96),
+      new THREE.MeshPhongMaterial({
+        map: loader.load('https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/textures/planets/earth_clouds_2048.png'),
+        transparent: true,
+        opacity: 0.7,
+        depthWrite: false,
+      })
+    );
+    state.g.add(state.clouds);
+
+    manager.onLoad = () => {
+      container.style.transition = 'opacity 2.5s';
+      container.style.opacity = '1';
+      startAnimation();
+    };
   }
 
-  main {
-    flex: 1;
-    /* Isolates the page from outside layout/paint work during transitions */
-    contain: layout paint style;
+  // Run on first load + after every ViewTransition.
+  // Critical: stop animation when leaving home so it doesn't fight the transition.
+  document.addEventListener('astro:page-load', () => {
+    if (window.location.pathname === '/') {
+      initGlobe();
+    } else {
+      stopAnimation();
+    }
+  });
+
+  // Belt-and-suspenders: also stop right before leaving home
+  document.addEventListener('astro:before-swap', () => {
+    if (window.location.pathname === '/') {
+      stopAnimation();
+    }
+  });
+</script>
+
+<style>
+  .page-one {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    background-color: transparent; /* global stars shine through */
   }
 
-  /* Keyframes for the custom page transition.
-     Must be global so they apply to ::view-transition-* pseudo-elements. */
-  @keyframes smoothIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes instantOut {
-    from, to { opacity: 0; }
-  }
-
-  /* === Persistent global star field === */
-  .global-stars {
-    position: fixed;
-    inset: 0;
+  .hero-text {
+    position: relative;
+    z-index: 3;
     pointer-events: none;
-    z-index: 0;
-    /* Isolate paint/composite to its own layer for smooth GPU rendering */
-    contain: layout paint style;
-    transform: translateZ(0);
+    padding: 10rem 4rem 0;
   }
 
-  .global-star {
+  h1 {
+    font-family: 'Barlow', sans-serif;
+    font-size: clamp(2rem, 6vw, 5rem);
+    font-weight: 800;
+    line-height: 0.95;
+    color: #e0e0e0;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .globe-container {
     position: absolute;
-    left: var(--x);
-    top: var(--y);
-    width: var(--size);
-    height: var(--size);
-    background: #ffffff;
-    border-radius: 50%;
-    opacity: 0;
-    animation: globalTwinkle 3s var(--delay) infinite ease-in-out;
+    top: 50%;
+    left: 80%;
+    width: 950px;
+    height: 950px;
+    z-index: 2;
+    pointer-events: none;
+    transform: translate(-50%, -45%);
   }
 
-  @keyframes globalTwinkle {
-    0%, 100% { opacity: 0; }
-    50% { opacity: 0.8; }
+  @media (max-width: 768px) {
+    .hero-text {
+      padding: 8.5rem 1.5rem 0 2.5rem;
+      max-width: 58%;
+    }
+
+    h1 {
+      font-size: 1.9rem;
+      line-height: 1.1;
+    }
+
+    .globe-container {
+      left: 78%;
+      top: 28%;
+      width: 320px;
+      height: 320px;
+      transform: translate(-50%, -50%);
+      opacity: 0.9;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .hero-text {
+      padding: 6.5rem 1.2rem 0;
+      max-width: 60%;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+    }
+
+    .globe-container {
+      left: 80%;
+      top: 25%;
+      width: 260px;
+      height: 260px;
+    }
   }
 </style>
