@@ -92,8 +92,8 @@ import SiteHeader from '../components/SiteHeader.astro';
     sunLight.position.set(-1.8, 1.2, 3.2);
     state.scene.add(sunLight);
 
-    // BLAULICH-TUNING: Höheres, bläuliches Umgebungslicht macht die Ozeane insgesamt heller
-    const ambientLight = new THREE.AmbientLight(0x1a243a, 1.2);
+    // ÄNDERUNG 1: Neutrales, dunkles Grau statt Navy-Blau für das Umgebungslicht
+    const ambientLight = new THREE.AmbientLight(0x111111, 1.2);
     state.scene.add(ambientLight);
 
     state.g = new THREE.Group();
@@ -111,14 +111,13 @@ import SiteHeader from '../components/SiteHeader.astro';
 
     textureMap.colorSpace = THREE.SRGBColorSpace;
 
-    // Erden-Material mit ausgewogenem, sanftem Glanz
     const earthMat = new THREE.MeshPhongMaterial({
       map: textureMap,
       specularMap: textureSpecular,
       normalMap: textureNormal,
       normalScale: new THREE.Vector2(0.9, 0.9),
-      shininess: 65,                         
-      specular: new THREE.Color(0x777777)    // Behält den gedimmten Reflex bei
+      shininess: 65,                                  
+      specular: new THREE.Color(0x777777)    
     });
 
     const earth = new THREE.Mesh(new THREE.SphereGeometry(R, 96, 96), earthMat);
@@ -166,7 +165,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     position: relative;
     height: 100vh;
     overflow: hidden;
-    background-color: transparent;
+    background-color: #000000; /* ÄNDERUNG 2: Festes Tiefschwarz statt transparent */
   }
 
   .hero-text {
