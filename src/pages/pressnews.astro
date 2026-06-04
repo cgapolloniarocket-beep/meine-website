@@ -1,16 +1,18 @@
 ---
+import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
-import SiteFooter from '../components/SiteFooter.astro';
- 
+
 // ─────────────────────────────────────────────────────────────────────────────
-// EINTRÄGE PFLEGEN: Neue News einfach oben in dieses Array einfügen.
-// category: 'Press Release' oder 'Newsletter'
-// date:     ISO-Format YYYY-MM-DD
-// url:      Link zum vollständigen Artikel (extern oder eigene Seite)
+// EINTRÄGE PFLEGEN: Neue News einfach in dieses Array einfügen.
+// Sortierung nach Datum übernimmt die Seite automatisch (neueste zuerst).
+//
+//   category: 'Press Release' oder 'Newsletter'
+//   date:     ISO-Format YYYY-MM-DD
+//   url:      Link zum vollständigen Artikel (extern oder eigene Seite)
 // ─────────────────────────────────────────────────────────────────────────────
- 
+
 type Category = 'Press Release' | 'Newsletter';
- 
+
 interface NewsItem {
   title: string;
   category: Category;
@@ -18,157 +20,156 @@ interface NewsItem {
   excerpt: string;
   url: string;
 }
- 
+
 const items: NewsItem[] = [
   {
-    title: 'Apollonia Space announces spin-out from Imperial College London',
+    title: 'To be disclosed',
     category: 'Press Release',
-    date: '2026-06-01',
-    excerpt:
-      "Apollonia Space, developing a novel Spherical Tokamak Thruster (STT) for in-space propulsion, has been formally established as a spin-out from Imperial College London's Plasma Propulsion Laboratory.",
+    date: '2026-05-14',
+    excerpt: 'To be disclosed',
     url: '#',
   },
   {
-    title: 'Newsletter #01 — From the Plasma Lab',
+    title: 'To be disclosed',
     category: 'Newsletter',
-    date: '2026-05-15',
-    excerpt:
-      "An introduction to our team, our technology, and what we're building. Subscribe to receive future updates directly to your inbox.",
+    date: '2026-04-28',
+    excerpt: 'To be disclosed',
     url: '#',
   },
   {
-    title: 'Apollonia Space joins EIC Pathfinder application round',
+    title: 'To be disclosed',
     category: 'Press Release',
-    date: '2026-04-20',
-    excerpt:
-      'The company has submitted its application to the European Innovation Council Pathfinder programme, targeting non-dilutive funding for early-stage development of its electrodeless plasma propulsion system.',
+    date: '2026-03-10',
+    excerpt: 'To be disclosed',
     url: '#',
-  },
+  }
 ];
- 
-// Neueste zuerst
+
 const sortedItems = [...items].sort(
   (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
 );
- 
+
 const formatDate = (iso: string) =>
   new Date(iso).toLocaleDateString('en-GB', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
   });
- 
+
 const slug = (c: Category) => c.toLowerCase().replace(' ', '-');
+const hasItems = sortedItems.length > 0;
 ---
- 
-<SiteHeader />
- 
-<main class="press-news">
-  <header class="page-head">
-    <p class="eyebrow">Press &amp; News</p>
-    <h1>Apollonia Space Updates</h1>
-    <p class="lede">
-      The latest announcements, press releases, and newsletters from
-      our team. For media inquiries, please contact
-      <a href="mailto:press@apollonia.space">press@apollonia.space</a>.
-    </p>
-  </header>
- 
-  <section class="filters" aria-label="Filter posts">
-    <span class="filter-label">Filter by:</span>
-    <div class="filter-buttons" role="tablist">
-      <button type="button" class="filter is-active" data-filter="all" role="tab" aria-selected="true">
-        All
-      </button>
-      <button type="button" class="filter" data-filter="press-release" role="tab" aria-selected="false">
-        Press Release
-      </button>
-      <button type="button" class="filter" data-filter="newsletter" role="tab" aria-selected="false">
-        Newsletter
-      </button>
+
+<Layout title="Apollonia – Press & News">
+  <section class="page-one">
+    <SiteHeader transition:persist />
+
+    <div class="hero-text">
+      <h1>PRESS &amp; NEWS</h1>
+      <p class="subtitle">The latest announcements, press releases, and newsletters from our team.</p>
     </div>
-    <button type="button" class="reset" data-reset>Reset</button>
-  </section>
- 
-  <section class="grid" aria-live="polite">
-    {sortedItems.map((item) => (
-      <article class="card" data-category={slug(item.category)}>
-        <div class="card-meta">
-          <span class={`tag tag--${slug(item.category)}`}>{item.category}</span>
-          <time datetime={item.date}>{formatDate(item.date)}</time>
+
+    <div class="main-content-area">
+      {hasItems && (
+        <section class="filters" aria-label="Filter posts">
+          <span class="filter-label">Filter by</span>
+          <div class="filter-buttons" role="tablist">
+            <button type="button" class="filter is-active" data-filter="all" role="tab" aria-selected="true">All</button>
+            <button type="button" class="filter" data-filter="press-release" role="tab" aria-selected="false">Press Release</button>
+            <button type="button" class="filter" data-filter="newsletter" role="tab" aria-selected="false">Newsletter</button>
+          </div>
+          <button type="button" class="reset" data-reset>Reset</button>
+        </section>
+      )}
+
+      {hasItems ? (
+        <section class="grid" aria-live="polite">
+          {sortedItems.map((item) => (
+            <article class="card" data-category={slug(item.category)}>
+              <div class="card-meta">
+                <span class={`tag tag--${slug(item.category)}`}>{item.category}</span>
+                <time datetime={item.date}>{formatDate(item.date)}</time>
+              </div>
+              <h3 class="card-title">
+                <a href={item.url}>{item.title}</a>
+              </h3>
+              <p class="card-excerpt">{item.excerpt}</p>
+              <a class="card-link" href={item.url}>
+                Read more &rarr;
+              </a>
+            </article>
+          ))}
+        </section>
+      ) : (
+        <div class="coming-soon">
+          <p>Coming soon</p>
         </div>
-        <h2 class="card-title">
-          <a href={item.url}>{item.title}</a>
-        </h2>
-        <p class="card-excerpt">{item.excerpt}</p>
-        <a class="card-link" href={item.url}>
-          Read more <span aria-hidden="true">→</span>
-        </a>
-      </article>
-    ))}
+      )}
+    </div>
   </section>
- 
-  <p class="empty" hidden>No posts match this filter yet.</p>
-</main>
- 
-<SiteFooter />
- 
+</Layout>
+
 <style>
-  /* ─── Scoped to this page; uses neutral CSS vars that can inherit from globals ── */
-  .press-news {
-    --pn-fg: var(--color-fg, #111);
-    --pn-fg-muted: var(--color-fg-muted, #555);
-    --pn-bg: var(--color-bg, #fff);
-    --pn-surface: var(--color-surface, #f6f6f4);
-    --pn-border: var(--color-border, #e5e5e0);
-    --pn-accent: var(--color-accent, #0b3d91); /* deep space blue, override in globals if needed */
-    --pn-accent-soft: var(--color-accent-soft, #e7eef9);
- 
-    max-width: 72rem;
-    margin: 0 auto;
-    padding: clamp(2.5rem, 6vw, 5rem) clamp(1.25rem, 4vw, 2.5rem) 6rem;
-    color: var(--pn-fg);
-    background: var(--pn-bg);
+  .page-one {
+    position: relative;
+    min-height: 100vh;
+    background-color: transparent;
   }
- 
-  .page-head {
-    max-width: 48rem;
-    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+
+  /* ─── 1:1 Importierte Titel- & Subtitel-Eigenschaften aus Podcast ─── */
+  .hero-text { 
+    padding: 10rem 4rem 0; 
+    position: relative; 
+    z-index: 3; 
   }
- 
-  .eyebrow {
-    font-size: 0.8125rem;
-    font-weight: 500;
-    letter-spacing: 0.14em;
+
+  h1 {
+    font-family: 'Barlow', sans-serif;
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 800;
+    line-height: 0.95;
+    color: #ffffff;
     text-transform: uppercase;
-    color: var(--pn-fg-muted);
-    margin: 0 0 1rem;
-  }
- 
-  .page-head h1 {
-    font-size: clamp(2.25rem, 5vw, 3.5rem);
-    line-height: 1.05;
-    font-weight: 600;
     letter-spacing: -0.02em;
-    margin: 0 0 1.25rem;
+    margin-bottom: 0;
   }
- 
-  .lede {
-    font-size: 1.0625rem;
-    line-height: 1.6;
-    color: var(--pn-fg-muted);
-    max-width: 38rem;
+
+  .subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding-left: 0.5rem;
+    line-height: 1.5;
+    max-width: 45%;
+    margin-top: 1.5rem;
+    margin-bottom: 0;
+  }
+
+  /* ─── Layout-Bereich für News-Inhalte ─── */
+  .main-content-area {
+    padding: 4rem 4rem 7rem;
+  }
+
+  /* Coming soon */
+  .coming-soon {
+    padding: clamp(4rem, 10vw, 8rem) 0;
+    text-align: center;
+  }
+
+  .coming-soon p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
     margin: 0;
   }
- 
-  .lede a {
-    color: var(--pn-accent);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    text-decoration-thickness: 1px;
-  }
- 
-  /* ─── Filters ─── */
+
+  /* Filters */
   .filters {
     display: flex;
     flex-wrap: wrap;
@@ -176,204 +177,227 @@ const slug = (c: Category) => c.toLowerCase().replace(' ', '-');
     gap: 1rem;
     padding: 1.25rem 0;
     margin-bottom: 2.5rem;
-    border-top: 1px solid var(--pn-border);
-    border-bottom: 1px solid var(--pn-border);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   }
- 
+
   .filter-label {
-    font-size: 0.875rem;
-    color: var(--pn-fg-muted);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
     margin-right: 0.25rem;
   }
- 
+
   .filter-buttons {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
   }
- 
+
   .filter {
     appearance: none;
-    border: 1px solid var(--pn-border);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     background: transparent;
-    color: var(--pn-fg);
-    font: inherit;
-    font-size: 0.9375rem;
-    padding: 0.5rem 1rem;
+    color: rgba(255, 255, 255, 0.85);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.55rem 1.2rem;
     border-radius: 999px;
     cursor: pointer;
-    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
   }
- 
+
   .filter:hover {
-    border-color: var(--pn-fg);
+    border-color: #42A5F5;
+    color: #42A5F5;
   }
- 
+
   .filter.is-active {
-    background: var(--pn-fg);
-    color: var(--pn-bg);
-    border-color: var(--pn-fg);
+    background: #ffffff;
+    color: #050d1a;
+    border-color: #ffffff;
   }
- 
+
   .reset {
     appearance: none;
     background: none;
     border: 0;
-    font: inherit;
-    font-size: 0.875rem;
-    color: var(--pn-fg-muted);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.5);
     cursor: pointer;
     text-decoration: underline;
     text-underline-offset: 3px;
     margin-left: auto;
     padding: 0.25rem 0;
+    transition: color 0.25s ease;
   }
- 
+
   .reset:hover {
-    color: var(--pn-fg);
+    color: #42A5F5;
   }
- 
-  /* ─── Cards ─── */
+
+  /* Grid & Cards (Farblich abgestimmt auf Podcast-Sektion) */
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
-    gap: 1.5rem;
+    gap: 2rem;
   }
- 
+
   .card {
     display: flex;
     flex-direction: column;
-    gap: 0.875rem;
+    gap: 1rem;
     padding: 1.75rem;
-    background: var(--pn-surface);
-    border: 1px solid var(--pn-border);
-    border-radius: 4px;
-    transition: transform 0.2s ease, border-color 0.2s ease;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+    cursor: pointer;
   }
- 
+
   .card:hover {
-    border-color: var(--pn-fg);
-    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.12);
   }
- 
+
   .card[hidden] {
     display: none;
   }
- 
+
   .card-meta {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.875rem;
     font-size: 0.8125rem;
-    color: var(--pn-fg-muted);
+    color: rgba(255, 255, 255, 0.5);
   }
- 
+
   .tag {
     display: inline-block;
-    font-size: 0.6875rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
     font-weight: 600;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    padding: 0.3rem 0.6rem;
-    border-radius: 2px;
-    background: var(--pn-bg);
-    border: 1px solid var(--pn-border);
-    color: var(--pn-fg);
+    padding: 0.32rem 0.7rem;
+    border-radius: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.85);
   }
- 
+
   .tag--press-release {
-    background: var(--pn-accent-soft);
-    border-color: transparent;
-    color: var(--pn-accent);
+    background: rgba(66, 165, 245, 0.12);
+    border-color: rgba(66, 165, 245, 0.4);
+    color: #42A5F5;
   }
- 
+
+  .tag--newsletter {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.22);
+  }
+
   .card-title {
-    font-size: 1.25rem;
+    font-family: 'Barlow', sans-serif;
+    font-size: 1.2rem;
     line-height: 1.3;
-    font-weight: 600;
-    letter-spacing: -0.01em;
+    font-weight: 700;
     margin: 0;
+    color: #ffffff;
   }
- 
+
   .card-title a {
     color: inherit;
     text-decoration: none;
+    transition: color 0.25s ease;
   }
- 
+
   .card-title a:hover {
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    color: #42A5F5;
   }
- 
+
   .card-excerpt {
-    font-size: 0.9375rem;
-    line-height: 1.55;
-    color: var(--pn-fg-muted);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.65);
     margin: 0;
     flex: 1;
+    font-weight: 300;
   }
- 
+
   .card-link {
     align-self: flex-start;
-    font-size: 0.9375rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
     font-weight: 500;
-    color: var(--pn-fg);
+    color: #ffffff;
     text-decoration: none;
-    border-bottom: 1px solid currentColor;
-    padding-bottom: 2px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    transition: color 0.25s ease, border-color 0.25s ease;
   }
- 
-  .card-link span {
-    display: inline-block;
-    transition: transform 0.15s ease;
+
+  .card-link:hover {
+    color: #42A5F5;
+    border-color: #42A5F5;
   }
- 
-  .card-link:hover span {
-    transform: translateX(3px);
+
+  /* ─── Media Queries (Ebenfalls aus Podcast gematcht) ─── */
+  @media (max-width: 1024px) and (min-width: 769px) {
+    .subtitle { max-width: 50%; }
   }
- 
-  .empty {
-    text-align: center;
-    color: var(--pn-fg-muted);
-    padding: 3rem 0;
-    font-size: 1rem;
+
+  @media (max-width: 768px) {
+    .hero-text { padding: 7rem 1.5rem 0; }
+    h1 { font-size: 2.4rem; line-height: 1.05; }
+    .subtitle { max-width: 100%; padding-left: 0; font-size: 0.8rem; }
+    .main-content-area { padding: 2.5rem 1.5rem; }
+    .grid { grid-template-columns: 1fr; }
+    .filters { gap: 0.75rem; }
+    .reset { margin-left: 0; }
   }
- 
-  @media (max-width: 640px) {
-    .reset {
-      margin-left: 0;
-    }
+
+  @media (max-width: 380px) {
+    .hero-text { padding: 6.5rem 1.2rem 0; }
+    h1 { font-size: 2rem; }
+    .main-content-area { padding: 2rem 1.2rem; }
   }
 </style>
- 
+
 <script>
-  // Client-side filter
-  const filterButtons = document.querySelectorAll<HTMLButtonElement>('.filter');
-  const cards = document.querySelectorAll<HTMLElement>('.card');
-  const resetButton = document.querySelector<HTMLButtonElement>('[data-reset]');
-  const emptyState = document.querySelector<HTMLElement>('.empty');
- 
-  function applyFilter(value: string) {
-    let visible = 0;
-    cards.forEach((card) => {
-      const match = value === 'all' || card.dataset.category === value;
-      card.hidden = !match;
-      if (match) visible++;
-    });
-    if (emptyState) emptyState.hidden = visible > 0;
- 
+  function initPressNewsFilter() {
+    const filterButtons = document.querySelectorAll<HTMLButtonElement>('.filter');
+    const cards = document.querySelectorAll<HTMLElement>('.card');
+    const resetButton = document.querySelector<HTMLButtonElement>('[data-reset]');
+
+    if (!filterButtons.length) return;
+
+    function applyFilter(value: string) {
+      cards.forEach((card) => {
+        const match = value === 'all' || card.dataset.category === value;
+        card.hidden = !match;
+      });
+
+      filterButtons.forEach((btn) => {
+        const active = btn.dataset.filter === value;
+        btn.classList.toggle('is-active', active);
+        btn.setAttribute('aria-selected', String(active));
+      });
+    }
+
     filterButtons.forEach((btn) => {
-      const active = btn.dataset.filter === value;
-      btn.classList.toggle('is-active', active);
-      btn.setAttribute('aria-selected', String(active));
+      btn.addEventListener('click', () => {
+        applyFilter(btn.dataset.filter || 'all');
+      });
     });
+
+    resetButton?.addEventListener('click', () => applyFilter('all'));
   }
- 
-  filterButtons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      applyFilter(btn.dataset.filter || 'all');
-    });
-  });
- 
-  resetButton?.addEventListener('click', () => applyFilter('all'));
+
+  document.addEventListener('astro:page-load', initPressNewsFilter);
 </script>
