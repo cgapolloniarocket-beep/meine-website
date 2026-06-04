@@ -34,6 +34,7 @@
       <a href="/" class="nav-link">Home</a>
       <a href="/podcast" class="nav-link">Podcast</a>
       <a href="/about" class="nav-link">About Us</a>
+      <a href="/pressnews" class="nav-link">Press &amp; News</a>
 
       <div class="social-group">
         <a href="https://www.youtube.com/@ApolloniaSpace" target="_blank" rel="noopener" title="YouTube" class="social-icon">
@@ -185,11 +186,12 @@
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.04 em;
     text-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
     transition: color 0.3s, border-color 0.3s;
     border-bottom: 2px solid transparent;
     padding-bottom: 4px;
+    white-space: nowrap;
   }
 
   .nav-link:hover {
@@ -223,8 +225,8 @@
     border: none;
     cursor: pointer;
     padding: 8px;
-    position: relative; /* ← NEU: ohne position wirkt z-index nicht */
-    z-index: 100;       /* ← erhöht, um sicher über dem Mobile-Menu zu liegen */
+    position: relative;
+    z-index: 100;
     width: 40px;
     height: 40px;
     flex-direction: column;
@@ -250,6 +252,23 @@
 
   .menu-toggle.active span:nth-child(3) {
     transform: rotate(-45deg) translate(7px, -7px);
+  }
+
+  /* Auf etwas schmaleren Desktops vor dem Mobile-Breakpoint:
+     Schrift leicht verkleinern, damit alle 4 Links + Socials in eine Reihe passen */
+  @media (max-width: 1100px) and (min-width: 769px) {
+    .nav-link {
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+    }
+
+    .nav-right {
+      gap: 0.85rem;
+    }
+
+    .site-nav {
+      padding: 0.8rem 1.5rem;
+    }
   }
 
   @media (max-width: 768px) {
@@ -312,4 +331,3 @@
     }
   }
 </style>
- 

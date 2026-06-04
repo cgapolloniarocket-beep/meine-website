@@ -1,11 +1,11 @@
 ---
 ---
- 
+
 <div class="footer-line"></div>
- 
+
 <footer class="site-footer">
   <div class="footer-inner">
- 
+
     <div class="newsletter">
       <h3>Join the Apollonia Space community</h3>
       <p class="lead">New episodes, space industry briefings and behind-the-scenes notes. Straight to your inbox.</p>
@@ -19,18 +19,19 @@
         <a href="https://substack.com/ccpa#personal-data-collected" target="_blank">Information collection notice</a>.
       </p>
     </div>
- 
+
     <div class="fcol">
       <h5>EXPLORE</h5>
       <ul>
         <li><a href="/">Home</a></li>
         <li><a href="/podcast">Podcast</a></li>
+        <li><a href="/pressnews">Press &amp; News</a></li>
         <li><a href="/about">About Us</a></li>
         <li><a href="/imprint">Imprint</a></li>
         <li><a href="/privacy">Privacy Policy</a></li>
       </ul>
     </div>
- 
+
     <div class="fcol">
       <h5>FOLLOW US</h5>
       <ul>
@@ -78,9 +79,9 @@
         </li>
       </ul>
     </div>
- 
+
   </div>
- 
+
   <div class="footer-base">
     <a class="brand" href="/">
       <img src="/apollonia_logo_white_black.png" alt="Apollonia Space" class="footer-logo" />
@@ -89,7 +90,7 @@
     <small>© 2026 Apollonia Space. All rights reserved.</small>
   </div>
 </footer>
- 
+
 <style>
   .footer-line {
     width: 100%;
@@ -99,14 +100,14 @@
     position: relative;
     z-index: 10;
   }
- 
+
   .site-footer {
     background: #000;
     color: #fff;
     padding: 3.5rem 4rem 3rem;
     font-family: 'Barlow', sans-serif;
   }
- 
+
   .footer-inner {
     max-width: 1400px;
     margin: 0 auto;
@@ -117,7 +118,7 @@
     padding-bottom: 4rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
- 
+
   .newsletter h3 {
     font-family: 'Barlow', sans-serif;
     font-size: 1.1rem;
@@ -128,20 +129,20 @@
     margin-top: 0;
     margin-bottom: 1rem;
   }
- 
+
   .lead {
     font-size: 1rem;
     color: rgba(255, 255, 255, 0.6);
     line-height: 1.7;
     margin-bottom: 2rem;
   }
- 
+
   .news-form {
     display: flex;
     gap: 0.5rem;
     margin-bottom: 1rem;
   }
- 
+
   .news-form input {
     flex: 1;
     min-width: 0;
@@ -154,15 +155,15 @@
     font-size: 0.9rem;
     outline: none;
   }
- 
+
   .news-form input::placeholder {
     color: rgba(255, 255, 255, 0.35);
   }
- 
+
   .news-form input:focus {
     border-color: #42A5F5;
   }
- 
+
   .news-form button {
     background: #ffffff;
     color: #000;
@@ -176,27 +177,27 @@
     transition: background 0.3s, color 0.3s;
     white-space: nowrap;
   }
- 
+
   .news-form button:hover {
     background: #42A5F5;
     color: #ffffff;
   }
- 
+
   .fineprint {
     font-size: 0.75rem;
     color: rgba(255, 255, 255, 0.3);
     line-height: 1.6;
   }
- 
+
   .fineprint a {
     color: rgba(255, 255, 255, 0.5);
     text-decoration: underline;
   }
- 
+
   .fineprint a:hover {
     color: #ffffff;
   }
- 
+
   .fcol h5 {
     font-family: 'Barlow', sans-serif;
     font-size: 1.1rem;
@@ -206,7 +207,7 @@
     margin-top: 0;
     margin-bottom: 1.5rem;
   }
- 
+
   .fcol ul {
     list-style: none;
     padding: 0;
@@ -215,7 +216,7 @@
     flex-direction: column;
     gap: 1rem;
   }
- 
+
   .fcol ul li a {
     color: rgba(255, 255, 255, 0.5);
     text-decoration: none;
@@ -223,17 +224,17 @@
     font-weight: 500;
     transition: color 0.3s;
   }
- 
+
   .fcol ul li a:hover {
     color: #ffffff;
   }
- 
+
   .social {
     display: flex;
     align-items: center;
     gap: 0.75rem;
   }
- 
+
   .footer-base {
     max-width: 1400px;
     margin: 2rem auto 0;
@@ -241,7 +242,7 @@
     justify-content: space-between;
     align-items: center;
   }
- 
+
   .brand {
     display: flex;
     align-items: center;
@@ -249,13 +250,13 @@
     text-decoration: none;
     color: #ffffff;
   }
- 
+
   .footer-logo {
     height: 40px;
     width: auto;
     display: block;
   }
- 
+
   .footer-brand-name {
     font-family: 'Montserrat', sans-serif;
     font-size: 0.9rem;
@@ -265,82 +266,82 @@
     white-space: nowrap;
     color: #ffffff;
   }
- 
+
   small {
     font-size: 0.75rem;
     color: rgba(255, 255, 255, 0.3);
   }
- 
+
   /* EXPLORE auf Desktop nach rechts */
   @media (min-width: 1025px) {
     .footer-inner > :nth-child(2) {
       padding-left: 5rem;
     }
   }
- 
+
   @media (max-width: 1024px) {
     .footer-inner {
       grid-template-columns: 1fr 1fr;
       gap: 3rem 2rem;
     }
- 
+
     /* Newsletter über volle Breite oben */
     .newsletter {
       grid-column: 1 / -1;
     }
- 
+
     .site-footer {
       padding: 4rem 2rem 3rem;
     }
- 
+
     .footer-base {
       flex-direction: column;
       gap: 1rem;
       text-align: center;
     }
   }
- 
+
   @media (max-width: 600px) {
     .site-footer {
       padding: 3rem 1.5rem 2.5rem;
     }
- 
+
     .footer-inner {
       gap: 2.5rem 1rem;
     }
- 
+
     .newsletter h3 {
       font-size: 1rem;
       line-height: 1.2;
     }
- 
+
     .lead {
       font-size: 0.95rem;
     }
- 
+
     /* Email-Feld + Button untereinander statt nebeneinander */
     .news-form {
       flex-direction: column;
       gap: 0.75rem;
     }
- 
+
     .news-form button {
       width: 100%;
       padding: 0.9rem 1.5rem;
     }
- 
+
     .fcol h5 {
       font-size: 1rem;
     }
- 
+
     .fcol ul li a {
       font-size: 0.9rem;
     }
- 
+
     .social {
       gap: 0.5rem;
     }
- 
+
     .footer-base {
       margin-top: 1.5rem;
     }
