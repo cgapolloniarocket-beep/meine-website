@@ -85,7 +85,7 @@ const faqs: FaqItem[] = [
     margin: 0 auto;
     padding: clamp(7rem, 12vw, 10rem) clamp(1.5rem, 4vw, 3rem) clamp(4rem, 8vw, 7rem);
     color: #ffffff;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Helvetica', Arial, sans-serif;
   }
 
   /* ─── Page header (identisch mit pressnews / about) ─── */
@@ -104,12 +104,12 @@ const faqs: FaqItem[] = [
   }
 
   .subtitle {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Helvetica', Arial, sans-serif;
     font-size: 1.0625rem;
     line-height: 1.65;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgb(255, 255, 255);
     margin: 0;
-    font-weight: 300;
+    font-weight: 400;
   }
 
   /* ─── FAQ list ─── */
@@ -127,20 +127,22 @@ const faqs: FaqItem[] = [
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   }
 
-  /* ─── Question (summary) ─── */
+  /* ─── Question — mission-content h2 Stil ─── */
   .faq-question {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 1.5rem;
-    padding: 1.5rem 0;
+    padding: 2rem 0;
     cursor: pointer;
     list-style: none;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.125rem;
-    font-weight: 600;
-    line-height: 1.4;
+    font-family: 'Helvetica', Arial, sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 400;
+    line-height: 1.2;
     color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
     transition: color 0.25s ease;
   }
 
@@ -159,8 +161,8 @@ const faqs: FaqItem[] = [
   /* ─── Plus / minus icon ─── */
   .faq-icon {
     position: relative;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     flex-shrink: 0;
   }
 
@@ -200,18 +202,18 @@ const faqs: FaqItem[] = [
     background: #42A5F5;
   }
 
-  /* ─── Answer ─── */
+  /* ─── Answer — gleiche Font-Family, lesbare Groesse ─── */
   .faq-answer {
     overflow: hidden;
-    padding: 0 0 1.75rem 0;
+    padding: 0 0 2rem 0;
   }
 
   .faq-answer p {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1rem;
+    font-family: 'Helvetica', Arial, sans-serif;
+    font-size: clamp(1rem, 2vw, 1.25rem);
     line-height: 1.7;
     color: rgba(255, 255, 255, 0.7);
-    font-weight: 300;
+    font-weight: 400;
     margin: 0;
     max-width: 42rem;
   }
@@ -233,16 +235,11 @@ const faqs: FaqItem[] = [
   /* ─── Responsive ─── */
   @media (max-width: 768px) {
     .faq-question {
-      font-size: 1rem;
-      padding: 1.25rem 0;
+      padding: 1.5rem 0;
     }
 
     .faq-answer {
-      padding-bottom: 1.25rem;
-    }
-
-    .faq-answer p {
-      font-size: 0.9375rem;
+      padding-bottom: 1.5rem;
     }
   }
 </style>
