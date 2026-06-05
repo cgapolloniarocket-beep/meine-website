@@ -1,0 +1,248 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FAQ PFLEGEN: Neue Fragen einfach in dieses Array einfuegen.
+// Die Reihenfolge hier bestimmt die Reihenfolge auf der Seite.
+// ─────────────────────────────────────────────────────────────────────────────
+
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+const faqs: FaqItem[] = [
+  {
+    question: 'What is Apollonia Space?',
+    answer:
+      'Apollonia Space is a space technology company spun out of Imperial College London. We are developing next-generation electric propulsion systems for spacecraft, with our core technology rooted in years of plasma physics research at the Imperial Plasma Propulsion Laboratory (IPPL).',
+  },
+  {
+    question: 'Question XL?',
+    answer:
+      'ANSWER XL.',
+  },
+  {
+   question: 'Question XLl?',
+    answer:
+      'ANSWER XL.',
+  },
+  {
+    question: 'Who is behind Apollonia Space?',
+    answer:
+      'Apollonia Space was co-f',
+  },
+  {
+    question: 'How is Apollonia Space?',
+    answer:
+      'We ',
+  },
+  {
+    question: 'How can I get in touch?',
+    answer:
+      'Reach out to us via email',
+  },
+];
+---
+
+<Layout
+  title="FAQ &mdash; Apollonia Space"
+  description="Frequently asked questions about Apollonia Space, our Spherical Tokamak Thruster technology, team, and mission."
+>
+  <SiteHeader />
+
+  <div class="faq-page">
+    <header class="page-head">
+      <h1>FAQ</h1>
+      <p class="subtitle">Frequently Asked Questions</p>
+    </header>
+
+    <div class="faq-list">
+      {faqs.map((faq, i) => (
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{faq.question}</span>
+            <div class="faq-icon" aria-hidden="true">
+              <span class="bar bar-h"></span>
+              <span class="bar bar-v"></span>
+            </div>
+          </summary>
+          <div class="faq-answer">
+            <p set:html={faq.answer} />
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .faq-page {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: clamp(7rem, 12vw, 10rem) clamp(1.5rem, 4vw, 3rem) clamp(4rem, 8vw, 7rem);
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  /* ─── Page header (identisch mit pressnews / about) ─── */
+  .page-head {
+    margin-bottom: clamp(3rem, 5vw, 4.5rem);
+  }
+
+  .faq-page h1 {
+    font-family: 'Barlow', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.5rem, 6vw, 4.75rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    margin: 0 0 1.75rem;
+  }
+
+  .subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    font-weight: 300;
+  }
+
+  /* ─── FAQ list ─── */
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .faq-item {
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .faq-item:last-child {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  /* ─── Question (summary) ─── */
+  .faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    cursor: pointer;
+    list-style: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #ffffff;
+    transition: color 0.25s ease;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-question::marker {
+    content: '';
+  }
+
+  .faq-question:hover {
+    color: #42A5F5;
+  }
+
+  /* ─── Plus / minus icon ─── */
+  .faq-icon {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .bar {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 1px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .bar-h {
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    transform: translateY(-50%);
+  }
+
+  .bar-v {
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    transform: translateX(-50%);
+  }
+
+  .faq-item[open] .bar-v {
+    transform: translateX(-50%) rotate(90deg);
+    opacity: 0;
+  }
+
+  .faq-item[open] .faq-question {
+    color: #42A5F5;
+  }
+
+  .faq-item[open] .bar {
+    background: #42A5F5;
+  }
+
+  /* ─── Answer ─── */
+  .faq-answer {
+    overflow: hidden;
+    padding: 0 0 1.75rem 0;
+  }
+
+  .faq-answer p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 300;
+    margin: 0;
+    max-width: 42rem;
+  }
+
+  .faq-answer a {
+    color: #ffffff;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+    text-decoration-color: rgba(255, 255, 255, 0.35);
+    transition: text-decoration-color 0.3s, color 0.3s;
+  }
+
+  .faq-answer a:hover {
+    color: #42A5F5;
+    text-decoration-color: #42A5F5;
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 768px) {
+    .faq-question {
+      font-size: 1rem;
+      padding: 1.25rem 0;
+    }
+
+    .faq-answer {
+      padding-bottom: 1.25rem;
+    }
+
+    .faq-answer p {
+      font-size: 0.9375rem;
+    }
+  }
+</style>
