@@ -99,7 +99,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     margin-top: -80px;
   }
 
-   h1 {
+  h1 {
     font-family: 'Barlow', sans-serif;
     font-size: clamp(2rem, 6vw, 5rem);
     font-weight: 800;
@@ -244,23 +244,94 @@ import SiteHeader from '../components/SiteHeader.astro';
     }
   }
 
+  /* ===== RESPONSIVE BREAKPOINTS ===== */
+
+  /* Tablet (1024px und kleiner) */
   @media (max-width: 1024px) {
+    :root {
+      --ring-size: 560px;
+    }
+
     .tech-grid {
       grid-template-columns: 1fr;
       grid-template-rows: auto 1fr;
-      padding-top: 6rem;
+      padding-top: 5rem;
     }
-    .plasma-viewport {
-      height: 60vh;
-    }
-    .plasma-scene {
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
+
     .hero-text {
       align-self: center;
       margin-top: 0;
       padding-left: 0;
+      text-align: center;
+    }
+
+    .plasma-viewport {
+      height: 55vh;
+      min-height: 420px;
+    }
+
+    .plasma-scene {
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Glow zentriert statt asymmetrisch */
+    .plasma-glow-overlay {
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 80vw;
+      height: 60vw;
+      max-width: 700px;
+      max-height: 520px;
+    }
+  }
+
+  /* Phone (640px und kleiner) */
+  @media (max-width: 640px) {
+    :root {
+      --ring-size: 380px;
+    }
+
+    .technology-page {
+      /* Verhindert Layout-Sprünge auf iOS Safari */
+      min-height: 100svh;
+    }
+
+    .tech-grid {
+      padding: 4rem 1rem 0;
+      gap: 1rem;
+    }
+
+    h1 {
+      font-size: clamp(1.6rem, 8vw, 2.4rem);
+    }
+
+    .plasma-viewport {
+      height: 50vh;
+      min-height: 340px;
+    }
+
+    .plasma-glow-overlay {
+      width: 95vw;
+      height: 70vw;
+      filter: blur(60px);
+    }
+
+    .plasma-container {
+      /* Drop-shadow reduzieren — frisst auf Mobile-GPUs Performance */
+      filter: drop-shadow(0 0 25px rgba(0, 120, 255, 0.45));
+    }
+  }
+
+  /* Sehr kleine Phones (iPhone SE etc.) */
+  @media (max-width: 380px) {
+    :root {
+      --ring-size: 320px;
+    }
+
+    .plasma-viewport {
+      min-height: 300px;
     }
   }
 </style>
