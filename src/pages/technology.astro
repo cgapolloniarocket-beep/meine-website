@@ -23,6 +23,22 @@ import SiteHeader from '../components/SiteHeader.astro';
                              scale="11"
                              xChannelSelector="R" yChannelSelector="G"/>
         </filter>
+
+        <!-- Mobile-Variante: schwächeres Displacement für kleineren Ring -->
+        <filter id="plasma-disp-core-mobile" x="-50%" y="-50%" width="200%" height="200%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.105"
+                        numOctaves="3" seed="7" result="turb">
+            <animate attributeName="baseFrequency"
+                     values="0.092;0.118;0.101;0.115;0.097;0.112;0.092"
+                     dur="33s" repeatCount="indefinite"/>
+            <animate attributeName="seed"
+                     values="7;19;31;13;43;25;37;7"
+                     dur="47s" repeatCount="indefinite"/>
+          </feTurbulence>
+          <feDisplacementMap in="SourceGraphic" in2="turb"
+                             scale="5"
+                             xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
       </defs>
     </svg>
 
@@ -54,16 +70,12 @@ import SiteHeader from '../components/SiteHeader.astro';
 <style>
   :root {
     --tilt: 66deg;
-    /* Rotation um 5 Sekunden verlangsamt (von 140s auf 145s) */
     --spin: 145s;
     --ring-size: 750px;
     --intro-duration: 5s;
 
-    /* Voller Filter mit SVG-Displacement — nur für die helle Mittelscheibe. */
     --plasma-filter-full: url(#plasma-disp-core) blur(0.8px)
                           brightness(1.4) contrast(1.25) saturate(1.2);
-
-    /* Geister-Filter ohne SVG-Anteil: nur GPU-beschleunigte CSS-Filter. */
     --plasma-filter-ghost: blur(0.8px)
                            brightness(1.4) contrast(1.25) saturate(1.2);
   }
@@ -100,14 +112,15 @@ import SiteHeader from '../components/SiteHeader.astro';
   }
 
   h1 {
-    font-family: 'Barlow', sans-serif;
+    font-family: 'Barlow', 'Inter', system-ui, -apple-system, sans-serif;
     font-size: clamp(2rem, 6vw, 5rem);
     font-weight: 800;
     line-height: 0.95;
-    color: #e0e0e0;
+    color: #ffffff;
     letter-spacing: -0.02em;
     text-transform: uppercase;
     margin: 0;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
   }
 
   .plasma-viewport {
@@ -183,7 +196,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     mix-blend-mode: screen;
     will-change: transform, opacity;
     opacity: 0;
-    backface-visibility: hidden; /* Schont die GPU bei der Rotation */
+    backface-visibility: hidden;
     animation:
       plasma-fade-in-slice var(--intro-duration) cubic-bezier(0.16, 1, 0.3, 1) forwards,
       plasma-spin-loop var(--spin) linear infinite;
@@ -193,7 +206,6 @@ import SiteHeader from '../components/SiteHeader.astro';
     filter: var(--plasma-filter-full);
   }
 
-  /* Sauberes 3D-Rendering über transformZ ohne Syntax-Konflikte */
   .plasma-slice-1 { transform: translateZ(-30px); --slice-opacity: 0.25; }
   .plasma-slice-2 { transform: translateZ(-15px); --slice-opacity: 0.55; }
   .plasma-slice-3 { transform: translateZ(0px);   --slice-opacity: 1.00; }
@@ -210,7 +222,6 @@ import SiteHeader from '../components/SiteHeader.astro';
     100% { opacity: var(--slice-opacity, 1); }
   }
 
-  /* Nutzt die performante, moderne rotate-Eigenschaft */
   @keyframes plasma-spin-loop {
     from { rotate: 0deg; }
     to   { rotate: -360deg; }
@@ -275,7 +286,6 @@ import SiteHeader from '../components/SiteHeader.astro';
       transform: translate(-50%, -50%);
     }
 
-    /* Glow zentriert statt asymmetrisch */
     .plasma-glow-overlay {
       left: 50%;
       top: 50%;
@@ -291,10 +301,14 @@ import SiteHeader from '../components/SiteHeader.astro';
   @media (max-width: 640px) {
     :root {
       --ring-size: 380px;
+
+      /* Mobile-Filter: schwächeres Displacement, KEIN Blur — schärferer Ring */
+      --plasma-filter-full: url(#plasma-disp-core-mobile)
+                            brightness(1.55) contrast(1.35) saturate(1.3);
+      --plasma-filter-ghost: brightness(1.55) contrast(1.35) saturate(1.3);
     }
 
     .technology-page {
-      /* Verhindert Layout-Sprünge auf iOS Safari */
       min-height: 100svh;
     }
 
@@ -303,8 +317,15 @@ import SiteHeader from '../components/SiteHeader.astro';
       gap: 1rem;
     }
 
+    /* Titel deutlich sichtbarer auf Mobile */
     h1 {
-      font-size: clamp(1.6rem, 8vw, 2.4rem);
+      color: #ffffff;
+      font-size: clamp(1.9rem, 9vw, 2.8rem);
+      font-weight: 900;
+      text-shadow:
+        0 2px 12px rgba(0, 0, 0, 0.7),
+        0 0 30px rgba(0, 100, 255, 0.25);
+      -webkit-font-smoothing: antialiased;
     }
 
     .plasma-viewport {
@@ -319,7 +340,6 @@ import SiteHeader from '../components/SiteHeader.astro';
     }
 
     .plasma-container {
-      /* Drop-shadow reduzieren — frisst auf Mobile-GPUs Performance */
       filter: drop-shadow(0 0 25px rgba(0, 120, 255, 0.45));
     }
   }
