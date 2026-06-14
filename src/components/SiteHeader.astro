@@ -1,4 +1,5 @@
 ---
+// SiteHeader.astro
 ---
 
 <header class="site-header">
@@ -32,23 +33,10 @@
 
     <div class="nav-right" id="nav-menu">
       <a href="/" class="nav-link">Home</a>
+      <a href="/technology" class="nav-link">Technology</a>
       <a href="/podcast" class="nav-link">Podcast</a>
       <a href="/about" class="nav-link">About Us</a>
-      <a href="/pressnews" class="nav-link">Press &amp; News</a>
-
-      <div class="social-group">
-        <a href="https://www.youtube.com/@ApolloniaSpace" target="_blank" rel="noopener" title="YouTube" class="social-icon">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.5 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg>
-        </a>
-
-        <a href="https://open.spotify.com/user/31vjkbepayfz4d62kj5ahsujkn3y" target="_blank" rel="noopener" title="Spotify" class="social-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm5.5 17.3c-.2.3-.6.4-1 .2-2.7-1.6-6-2-10-1.1-.4.1-.8-.1-.9-.5-.1-.4.1-.8.5-.9 4.3-1 8.1-.6 11.1 1.2.4.2.5.7.3 1.1zm1.5-3.3c-.3.4-.8.5-1.2.3-3-1.9-7.7-2.4-11.3-1.3-.5.1-1-.1-1.1-.6-.1-.5.1-1 .6-1.1 4.1-1.3 9.2-.7 12.7 1.5.3.2.5.8.3 1.2zm.1-3.4c-3.7-2.2-9.7-2.4-13.2-1.3-.5.2-1.1-.1-1.3-.6-.2-.5.1-1.1.6-1.3 4-1.2 10.7-1 14.9 1.5.5.3.6.9.4 1.4-.3.5-.9.6-1.4.3z"/></svg>
-        </a>
-
-        <a href="#" target="_blank" title="Apple Podcasts" class="social-icon apple-fix">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M5.3 17.1c.2.5.4 1 .7 1.6.4.7.7 1.2 1 1.5.4.5.8.8 1.2.9.4.1.9.2 1.4.1.4-.1.8-.2 1.4-.5.5-.3 1-.4 1.5-.4s1 .1 1.5.4c.5.3 1 .4 1.4.5.5.1.9 0 1.3-.2.5-.3.9-.7 1.3-1.3.3-.4.6-.9.9-1.5.3-.7.6-1.4.7-2-.1 0-.5-.2-1.1-.5-.6-.3-1.1-.8-1.5-1.4-.4-.6-.7-1.4-.7-2.2 0-1 .3-1.8.9-2.5.3-.4.7-.7 1.2-1-0.7-1-1.7-1.5-2.9-1.6-.5 0-1.2.2-1.9.5-.7.3-1.1.5-1.3.5-.3 0-.7-.2-1.3-.5-.6-.3-1.1-.4-1.6-.5h-.3c-.8.1-1.6.4-2.3 1-.7.6-1.2 1.3-1.5 2.2-.4 1-.5 2.1-.4 3.2.1 1.1.4 2.3.9 3.4zM12 5.5c.3-1 .9-1.8 1.7-2.5.8-.7 1.7-1 2.6-1.1 0 1-.3 2-1 2.8-.7.9-1.6 1.4-2.7 1.5-.3 0-.5-.2-.6-.7z"/></svg>
-        </a>
-      </div>
+      <a href="/pressnews" class="nav-link">Press & News</a>
     </div>
   </nav>
 </header>
@@ -60,11 +48,10 @@
 
     if (!menuToggle || !navMenu) return;
 
-    // Schließe Menü nach Navigation (Header persistiert, also bleibt Open-State sonst kleben)
+    // Close menu on new page load navigation
     navMenu.classList.remove('open');
     menuToggle.classList.remove('active');
 
-    // Listener nur einmal anhängen — Header ist persistent, DOM bleibt gleich
     if (menuToggle.dataset.menuInit === 'true') return;
     menuToggle.dataset.menuInit = 'true';
 
@@ -73,7 +60,6 @@
       menuToggle.classList.toggle('active');
     });
 
-    // Bonus: tap auf einen Nav-Link schließt das Menü sofort
     navMenu.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
       if (target.closest('a')) {
@@ -168,15 +154,7 @@
     display: flex;
     align-items: center;
     flex-wrap: nowrap;
-    gap: 1rem;
-  }
-
-  .social-group {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    flex-wrap: nowrap;
-    gap: 1rem;
+    gap: 1.5rem;
   }
 
   .nav-link {
@@ -186,7 +164,7 @@
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.04 em;
+    letter-spacing: 0.04em;
     text-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
     transition: color 0.3s, border-color 0.3s;
     border-bottom: 2px solid transparent;
@@ -197,26 +175,6 @@
   .nav-link:hover {
     color: #42A5F5;
     border-bottom: 2px solid #42A5F5;
-  }
-
-  .social-icon {
-    color: #ffffff;
-    text-decoration: none;
-    text-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
-    transition: color 0.3s;
-    display: flex;
-    align-items: center;
-    transform: translateY(-2px);
-  }
-
-  .social-icon:hover {
-    color: #42A5F5;
-  }
-
-  .social-icon.apple-fix {
-    margin-left: -4px;
-    margin-right: -4px;
-    transform: translateY(-3px);
   }
 
   .menu-toggle {
@@ -254,16 +212,15 @@
     transform: rotate(-45deg) translate(7px, -7px);
   }
 
-  /* Auf etwas schmaleren Desktops vor dem Mobile-Breakpoint:
-     Schrift leicht verkleinern, damit alle 4 Links + Socials in eine Reihe passen */
+  /* Font adaptation rules for modern medium width desktop scales */
   @media (max-width: 1100px) and (min-width: 769px) {
     .nav-link {
-      font-size: 0.9rem;
-      letter-spacing: 0.08em;
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
     }
 
     .nav-right {
-      gap: 0.85rem;
+      gap: 1rem;
     }
 
     .site-nav {
@@ -314,14 +271,6 @@
       font-size: 1.1rem;
       width: 100%;
       padding: 0.5rem 0;
-    }
-
-    .social-group {
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      width: 100%;
-      gap: 1.5rem;
     }
   }
 

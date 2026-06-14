@@ -43,23 +43,19 @@ import SiteHeader from '../components/SiteHeader.astro';
     camera: null,
   });
 
-  // Zeit-Variable für die Blinzel-Animation
   let clockTime = 0;
 
+  // --- ANIMATION CONTROLS ---
   function startAnimation() {
     if (state.rafId !== null) return;
     const tick = () => {
       state.rafId = requestAnimationFrame(tick);
       
-      // Rotationen
       if (state.g) state.g.rotation.y += 0.0004;
       if (state.clouds) state.clouds.rotation.y += 0.0003;
       if (state.stars) {
-        state.stars.rotation.y += 0.00002; // Sehr langsame Rotation
-        
-        // Sanftes, langsames Blinzeln über Sinus-Welle steuern
+        state.stars.rotation.y += 0.00002;
         clockTime += 0.005; 
-        // Pendelt die Opacity sanft zwischen 0.2 und 0.5 hin und her
         state.stars.material.opacity = 0.35 + Math.sin(clockTime) * 0.15;
       }
       
@@ -77,6 +73,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     }
   }
 
+  // --- THREE.JS GLOBE ENGINE ---
   async function initGlobe() {
     const container = document.getElementById('globe');
     if (!container) return;
@@ -93,7 +90,6 @@ import SiteHeader from '../components/SiteHeader.astro';
     const R = 0.92;
     state.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     
-    // NEU: Pixel Ratio setzen für schärfere Texturen auf Retina-/High-Res-Bildschirmen
     state.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     state.renderer.setSize(container.clientWidth, container.clientHeight);
     
@@ -113,7 +109,6 @@ import SiteHeader from '../components/SiteHeader.astro';
     const ambientLight = new THREE.AmbientLight(0x111111, 1.2);
     state.scene.add(ambientLight);
 
-    // Sternenfeld Generierung
     const starsGeometry = new THREE.BufferGeometry();
     const starsCount = 1200; 
     const starPositions = new Float32Array(starsCount * 3);
@@ -200,6 +195,7 @@ import SiteHeader from '../components/SiteHeader.astro';
     };
   }
 
+  // --- LIFECYCLE ROUTING ---
   document.addEventListener('astro:page-load', () => {
     if (window.location.pathname === '/') {
       initGlobe();
@@ -225,7 +221,7 @@ import SiteHeader from '../components/SiteHeader.astro';
 
   .hero-text {
     position: relative;
-    z-index: 3;
+    z-index: 4;
     pointer-events: none;
     padding: 10rem 4rem 0;
   }

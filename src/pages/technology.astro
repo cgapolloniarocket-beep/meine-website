@@ -1,0 +1,266 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+---
+
+<Layout title="Apollonia – Coming Soon">
+  <section class="technology-page">
+    <SiteHeader transition:persist />
+
+    <svg class="plasma-defs" width="0" height="0" aria-hidden="true">
+      <defs>
+        <filter id="plasma-disp-core" x="-50%" y="-50%" width="200%" height="200%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.105"
+                        numOctaves="4" seed="7" result="turb">
+            <animate attributeName="baseFrequency"
+                     values="0.092;0.118;0.101;0.115;0.097;0.112;0.092"
+                     dur="33s" repeatCount="indefinite"/>
+            <animate attributeName="seed"
+                     values="7;19;31;13;43;25;37;7"
+                     dur="47s" repeatCount="indefinite"/>
+          </feTurbulence>
+          <feDisplacementMap in="SourceGraphic" in2="turb"
+                             scale="11"
+                             xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+      </defs>
+    </svg>
+
+    <div class="tech-grid">
+      <div class="hero-text">
+        <h1>
+          PROTOTYPE IN PROGRESS. 
+        </h1>
+      </div>
+
+      <div class="plasma-viewport">
+        <div class="plasma-glow-overlay"></div>
+        <div class="plasma-container">
+          <div class="plasma-scene" aria-label="Plasma propulsion animation">
+            <div class="plasma-stage">
+              <img src="/plasma-core.png" alt="" class="plasma-slice plasma-slice-1" />
+              <img src="/plasma-core.png" alt="" class="plasma-slice plasma-slice-2" />
+              <img src="/plasma-core.png" alt="" class="plasma-slice plasma-slice-3" />
+              <img src="/plasma-core.png" alt="" class="plasma-slice plasma-slice-4" />
+              <img src="/plasma-core.png" alt="" class="plasma-slice plasma-slice-5" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  :root {
+    --tilt: 66deg;
+    /* Rotation um 5 Sekunden verlangsamt (von 140s auf 145s) */
+    --spin: 145s;
+    --ring-size: 750px;
+    --intro-duration: 5s;
+
+    /* Voller Filter mit SVG-Displacement — nur für die helle Mittelscheibe. */
+    --plasma-filter-full: url(#plasma-disp-core) blur(0.8px)
+                          brightness(1.4) contrast(1.25) saturate(1.2);
+
+    /* Geister-Filter ohne SVG-Anteil: nur GPU-beschleunigte CSS-Filter. */
+    --plasma-filter-ghost: blur(0.8px)
+                           brightness(1.4) contrast(1.25) saturate(1.2);
+  }
+
+  .plasma-defs { position: absolute; width: 0; height: 0; pointer-events: none; }
+
+  .technology-page {
+    min-height: 100vh;
+    background-color: #030308;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .tech-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .hero-text {
+    position: relative;
+    z-index: 4;
+    pointer-events: none;
+    padding-left: 2rem;
+    align-self: center;
+    margin-top: -80px;
+  }
+
+   h1 {
+    font-family: 'Barlow', sans-serif;
+    font-size: clamp(2rem, 6vw, 5rem);
+    font-weight: 800;
+    line-height: 0.95;
+    color: #e0e0e0;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .plasma-viewport {
+    position: relative;
+    width: 100%;
+    height: 85vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .plasma-glow-overlay {
+    position: absolute;
+    width: 950px;
+    height: 700px;
+    background: radial-gradient(
+      circle,
+      rgba(0, 130, 255, 0.22) 0%,
+      rgba(0, 40, 150, 0.06) 45%,
+      transparent 75%
+    );
+    filter: blur(90px);
+    z-index: 1;
+    pointer-events: none;
+    left: 45%;
+    top: 15%;
+    opacity: 0;
+    animation:
+      plasma-ambient-throb 12s ease-in-out infinite,
+      fade-in-glow 4s ease-out forwards;
+  }
+
+  .plasma-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 1250px;
+    max-height: 900px;
+    background: transparent;
+    overflow: visible;
+    z-index: 2;
+    pointer-events: none;
+    filter: drop-shadow(0 0 45px rgba(0, 120, 255, 0.55));
+  }
+
+  .plasma-scene {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--ring-size);
+    height: var(--ring-size);
+    perspective: 1600px;
+    transform: translate(-50%, -50%);
+  }
+
+  .plasma-stage {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    transform: rotateX(var(--tilt));
+    scale: 0.50;
+    will-change: transform, scale;
+    animation: stage-grow-intro var(--intro-duration) cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .plasma-slice {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    image-rendering: auto;
+    filter: var(--plasma-filter-ghost);
+    mix-blend-mode: screen;
+    will-change: transform, opacity;
+    opacity: 0;
+    backface-visibility: hidden; /* Schont die GPU bei der Rotation */
+    animation:
+      plasma-fade-in-slice var(--intro-duration) cubic-bezier(0.16, 1, 0.3, 1) forwards,
+      plasma-spin-loop var(--spin) linear infinite;
+  }
+
+  .plasma-slice-3 {
+    filter: var(--plasma-filter-full);
+  }
+
+  /* Sauberes 3D-Rendering über transformZ ohne Syntax-Konflikte */
+  .plasma-slice-1 { transform: translateZ(-30px); --slice-opacity: 0.25; }
+  .plasma-slice-2 { transform: translateZ(-15px); --slice-opacity: 0.55; }
+  .plasma-slice-3 { transform: translateZ(0px);   --slice-opacity: 1.00; }
+  .plasma-slice-4 { transform: translateZ(15px);  --slice-opacity: 0.55; }
+  .plasma-slice-5 { transform: translateZ(30px);  --slice-opacity: 0.25; }
+
+  @keyframes stage-grow-intro {
+    0%   { scale: 0.50; }
+    100% { scale: 0.95; }
+  }
+
+  @keyframes plasma-fade-in-slice {
+    0%   { opacity: 0; }
+    100% { opacity: var(--slice-opacity, 1); }
+  }
+
+  /* Nutzt die performante, moderne rotate-Eigenschaft */
+  @keyframes plasma-spin-loop {
+    from { rotate: 0deg; }
+    to   { rotate: -360deg; }
+  }
+
+  @keyframes plasma-ambient-throb {
+    0%, 100% { opacity: 0.8; }
+    50%      { opacity: 1.0; }
+  }
+
+  @keyframes fade-in-glow {
+    0%   { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .plasma-stage {
+      animation: none;
+      scale: 0.95;
+    }
+    .plasma-slice {
+      animation: none;
+      opacity: var(--slice-opacity, 1);
+    }
+    .plasma-glow-overlay {
+      animation: none;
+      opacity: 1;
+    }
+    .plasma-defs feTurbulence animate {
+      display: none;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .tech-grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr;
+      padding-top: 6rem;
+    }
+    .plasma-viewport {
+      height: 60vh;
+    }
+    .plasma-scene {
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .hero-text {
+      align-self: center;
+      margin-top: 0;
+      padding-left: 0;
+    }
+  }
+</style>
