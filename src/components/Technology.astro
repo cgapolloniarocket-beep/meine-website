@@ -1,0 +1,54 @@
+---
+// Technology.astro — 40/60 two-column on desktop, stacked on mobile.
+// HARD RULE: no thrust / Isp / power / mass / efficiency numbers on this page.
+---
+
+<section id="technology" class="tech">
+  <div class="container tech__inner">
+    <div class="tech__lead">
+      <p class="eyebrow">Technology</p>
+      <h2 class="tech__oneliner">[PLACEHOLDER_TECH_ONELINER]</h2>
+    </div>
+
+    <div class="tech__body">
+      <p>[PLACEHOLDER_TECH_BODY — paragraph 1]</p>
+      <p>[PLACEHOLDER_TECH_BODY — paragraph 2]</p>
+      <p>[PLACEHOLDER_TECH_BODY — paragraph 3, optional]</p>
+      <!-- specs pending ITAR/EAR review -->
+    </div>
+  </div>
+</section>
+
+<style>
+  .tech {
+    border-top: 1px solid var(--rule);
+    padding-block: clamp(72px, 12vw, 140px);
+  }
+
+  .tech__inner {
+    display: grid;
+    gap: clamp(32px, 6vw, 80px);
+  }
+
+  @media (min-width: 900px) {
+    .tech__inner {
+      grid-template-columns: 40fr 60fr;
+      align-items: start;
+    }
+  }
+
+  .tech__oneliner {
+    margin-top: 16px;
+    font-size: clamp(1.75rem, 3.6vw, 2.75rem);
+  }
+
+  .tech__body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25em;
+    max-width: 60ch;
+    color: var(--fg-muted);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+</style>

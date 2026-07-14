@@ -1,0 +1,106 @@
+---
+// Team.astro — two hairline cards, side-by-side on desktop, stacked on mobile.
+---
+
+<section id="team" class="team">
+  <div class="container">
+    <p class="eyebrow">Spun out of Imperial College London</p>
+
+    <div class="team__grid">
+      <article class="card">
+        <h2 class="card__name">Caspar Gross</h2>
+        <p class="card__role">Co-Founder &amp; CEO</p>
+        <p class="card__bio">[PLACEHOLDER_CASPAR_BIO]</p>
+        <a class="card__link" href="[PLACEHOLDER_LINKEDIN]" target="_blank" rel="noopener">
+          LinkedIn
+          <span aria-hidden="true">↗</span>
+        </a>
+      </article>
+
+      <article class="card">
+        <h2 class="card__name">Aaron Knoll</h2>
+        <p class="card__role">Co-Founder &amp; CTO</p>
+        <p class="card__affiliation">Associate Professor, Imperial College London — leads the Plasma Propulsion Laboratory</p>
+        <p class="card__bio">[PLACEHOLDER_AARON_BIO]</p>
+        <a class="card__link" href="[PLACEHOLDER_LINKEDIN]" target="_blank" rel="noopener">
+          LinkedIn
+          <span aria-hidden="true">↗</span>
+        </a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .team {
+    border-top: 1px solid var(--rule);
+    padding-block: clamp(72px, 12vw, 140px);
+  }
+
+  .team__grid {
+    margin-top: clamp(32px, 5vw, 56px);
+    display: grid;
+    gap: 24px;
+  }
+
+  @media (min-width: 768px) {
+    .team__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: clamp(28px, 4vw, 48px);
+    background: var(--surface);
+  }
+
+  .card__name {
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+  }
+
+  .card__role {
+    margin-top: 6px;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+  }
+
+  .card__affiliation {
+    margin-top: 18px;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--fg-muted);
+  }
+
+  .card__bio {
+    margin-top: 18px;
+    color: var(--fg-muted);
+    line-height: 1.6;
+  }
+
+  .card__link {
+    margin-top: 28px;
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    color: var(--fg);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 2px;
+    transition: border-color 160ms ease-out;
+  }
+  .card__link:hover {
+    border-bottom-color: var(--fg);
+  }
+</style>

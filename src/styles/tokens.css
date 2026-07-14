@@ -1,0 +1,25 @@
+/* Apollonia Space — design tokens.
+   All raw hex/rgba values live here. Components reference these via var(). */
+:root {
+  --bg: #030308;           /* near-black */
+  --fg: #E8DCC8;           /* cream */
+  --fg-muted: rgba(232, 220, 200, 0.65);
+  --fg-dim:   rgba(232, 220, 200, 0.45);
+  --rule:     rgba(232, 220, 200, 0.12);
+
+  /* Subtle surface fills (cards, inputs) */
+  --surface:       rgba(232, 220, 200, 0.025);
+  --surface-hover: rgba(232, 220, 200, 0.05);
+
+  /* Focus ring — must stay visible against near-black */
+  --focus: #E8DCC8;
+
+  /* Layout */
+  --maxw: 1280px;
+  --gutter-sm: 24px;
+  --gutter-lg: 64px;
+
+  /* Type families */
+  --font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter Variable', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}

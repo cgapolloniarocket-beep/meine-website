@@ -1,0 +1,85 @@
+---
+// Hero.astro — left-aligned, type-led. Solid --bg background.
+---
+
+<section class="hero">
+  <div class="container hero__inner">
+    <h1 class="hero__headline">[PLACEHOLDER_HEADLINE — 6–10 words, final copy pending]</h1>
+
+    <p class="hero__subhead">[PLACEHOLDER_SUBHEAD — 1–2 sentences, plain-English description of the STT, no performance numbers]</p>
+
+    <div class="hero__ctas">
+      <a class="btn btn--primary" href="mailto:cg@apolloniaspace.com">Get in touch</a>
+      <a class="btn btn--secondary" href="#technology">Read the technology</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    min-height: 70vh;
+    max-height: 100vh;
+    padding-block: clamp(96px, 16vh, 200px);
+  }
+
+  .hero__inner {
+    max-width: 980px;
+  }
+
+  .hero__headline {
+    font-size: clamp(2.75rem, 8vw, 5.5rem);
+    margin: 0;
+  }
+
+  .hero__subhead {
+    margin-top: clamp(20px, 3vw, 32px);
+    max-width: 56ch;
+    font-size: clamp(1.0625rem, 1.4vw, 1.25rem);
+    line-height: 1.55;
+    color: var(--fg-muted);
+  }
+
+  .hero__ctas {
+    margin-top: clamp(28px, 4vw, 44px);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    padding: 13px 26px;
+    border-radius: 2px;
+    border: 1px solid var(--rule);
+    transition: background-color 160ms ease-out, color 160ms ease-out, border-color 160ms ease-out;
+  }
+
+  .btn--primary {
+    background: var(--fg);
+    color: var(--bg);
+    border-color: var(--fg);
+  }
+  .btn--primary:hover {
+    background: transparent;
+    color: var(--fg);
+    border-color: var(--fg);
+  }
+
+  .btn--secondary {
+    background: transparent;
+    color: var(--fg);
+  }
+  .btn--secondary:hover {
+    border-color: var(--fg);
+  }
+</style>

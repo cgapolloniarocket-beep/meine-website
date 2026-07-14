@@ -1,0 +1,190 @@
+---
+// Nav.astro — sticky, transparent over hero. A hairline divider fades in once
+// the page is scrolled past ~80px, using a CSS scroll-driven animation (no JS).
+// Mobile menu is the CSS-only checkbox hack: a hidden checkbox toggles a
+// full-screen overlay. No client-side JavaScript anywhere in this component.
+---
+
+<header class="nav">
+  <div class="container nav__inner">
+    <a href="/" class="nav__brand" aria-label="Apollonia Space — home">
+      <!-- Spike mark (decorative; the wordmark beside it carries the name) -->
+      <svg class="nav__spike" viewBox="0 0 128 128" fill="none" aria-hidden="true" focusable="false">
+        <path d="M50.4 78.5a75.1 75.1 0 0 0-28.5 6.9l24.2-65.7c.7-2 1.9-3.2 3.4-3.2h29c1.5 0 2.7 1.2 3.4 3.2l24.2 65.7s-11.6-7-28.5-7L67 45.5c-.4-1.7-1.6-2.8-2.9-2.8-1.3 0-2.5 1.1-2.9 2.7L50.4 78.5Zm-1.1 28.2Zm-4.2-20.2c-2 6.6-.6 15.8 4.2 20.2a17.5 17.5 0 0 1 .2-.7 5.5 5.5 0 0 1 5.7-4.5c2.8.1 4.3 1.5 4.7 4.7.2 1.1.2 2.3.2 3.5v.4c0 2.7.7 5.2 2.2 7.4a13 13 0 0 0 5.7 4.9v-.3l-.2-.3c-1.8-5.6-.5-9.5 4.4-12.8l1.5-1a73 73 0 0 0 3.2-2.2 16 16 0 0 0 6.8-11.4c.3-2 .1-4-.6-6l-.8.6-1.6 1a37 37 0 0 1-22.4 2.7c-5-.7-9.7-2-13.2-6.2Z" />
+      </svg>
+      <span class="nav__wordmark">APOLLONIA</span>
+    </a>
+
+    <!-- CSS-only mobile menu toggle -->
+    <input type="checkbox" id="nav-toggle" class="nav__checkbox" aria-hidden="true" tabindex="-1" />
+    <label for="nav-toggle" class="nav__burger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </label>
+
+    <nav class="nav__menu" aria-label="Primary">
+      <ul class="nav__links">
+        <li><a href="#technology">Technology</a></li>
+        <li><a href="#team">Team</a></li>
+        <li><a href="#news">News</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+  }
+
+  /* Divider fades in after 80px of scroll. Progressive enhancement: where
+     scroll-driven animations aren't supported, the nav simply stays
+     borderless — no layout dependency on it. */
+  @supports (animation-timeline: scroll()) {
+    .nav {
+      animation: nav-divider linear both;
+      animation-timeline: scroll(root);
+      animation-range: 80px 81px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .nav { animation-duration: 1ms; }
+    }
+  }
+
+  @keyframes nav-divider {
+    to { border-bottom-color: var(--rule); }
+  }
+
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 72px;
+  }
+
+  .nav__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--fg);
+  }
+
+  .nav__spike {
+    width: 26px;
+    height: 26px;
+    flex: none;
+  }
+  .nav__spike path {
+    fill: var(--fg);
+  }
+
+  .nav__wordmark {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 1rem;
+    letter-spacing: 0.18em;
+  }
+
+  .nav__menu {
+    display: flex;
+  }
+
+  .nav__links {
+    display: flex;
+    align-items: center;
+    gap: clamp(20px, 3vw, 40px);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav__links a {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: var(--fg-muted);
+    text-decoration: none;
+    transition: color 160ms ease-out;
+  }
+  .nav__links a:hover {
+    color: var(--fg);
+  }
+
+  /* Toggle + burger hidden on desktop */
+  .nav__checkbox,
+  .nav__burger {
+    display: none;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 767px) {
+    .nav__burger {
+      display: inline-flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 44px;
+      height: 44px;
+      margin-right: -10px;
+      padding: 10px;
+      cursor: pointer;
+      z-index: 60;
+    }
+    .nav__burger span {
+      display: block;
+      height: 1.5px;
+      width: 100%;
+      background: var(--fg);
+      transition: transform 160ms ease-out, opacity 160ms ease-out;
+    }
+
+    /* Keyboard focus ring on the label */
+    .nav__checkbox:focus-visible + .nav__burger {
+      outline: 2px solid var(--focus);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    .nav__menu {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 200ms ease-out, visibility 200ms ease-out;
+    }
+    .nav__checkbox:checked ~ .nav__menu {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .nav__links {
+      flex-direction: column;
+      gap: 28px;
+    }
+    .nav__links a {
+      font-size: 1.25rem;
+      color: var(--fg);
+    }
+
+    /* Burger → close (X) when open */
+    .nav__checkbox:checked + .nav__burger span:nth-child(1) {
+      transform: translateY(6.5px) rotate(45deg);
+    }
+    .nav__checkbox:checked + .nav__burger span:nth-child(2) {
+      opacity: 0;
+    }
+    .nav__checkbox:checked + .nav__burger span:nth-child(3) {
+      transform: translateY(-6.5px) rotate(-45deg);
+    }
+  }
+</style>

@@ -1,0 +1,100 @@
+---
+// Updates.astro — newsletter signup. Pure HTML POST, no JavaScript, no tracking.
+// The form posts directly to the ESP/Substack endpoint (placeholder below).
+---
+
+<section id="news" class="updates">
+  <div class="container">
+    <div class="updates__measure">
+      <p class="eyebrow">Updates</p>
+      <h2 class="updates__headline">[PLACEHOLDER_NEWSLETTER_HEADLINE]</h2>
+      <p class="updates__desc">[PLACEHOLDER_NEWSLETTER_DESCRIPTION — one line]</p>
+
+      <form class="updates__form" action="[PLACEHOLDER_SUBSTACK_OR_ESP_ENDPOINT]" method="post">
+        <label class="sr-only" for="email">Email address</label>
+        <input
+          class="updates__input"
+          type="email"
+          id="email"
+          name="email"
+          placeholder="you@email.com"
+          autocomplete="email"
+          required
+        />
+        <button class="updates__submit" type="submit">Subscribe</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  .updates {
+    border-top: 1px solid var(--rule);
+    padding-block: clamp(72px, 12vw, 140px);
+  }
+
+  .updates__measure {
+    max-width: 640px;
+  }
+
+  .updates__headline {
+    margin-top: 14px;
+    font-size: clamp(1.75rem, 3.6vw, 2.75rem);
+  }
+
+  .updates__desc {
+    margin-top: 16px;
+    color: var(--fg-muted);
+  }
+
+  .updates__form {
+    margin-top: 32px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .updates__input {
+    flex: 1 1 260px;
+    min-width: 0;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--fg);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 13px 16px;
+    transition: border-color 160ms ease-out;
+  }
+  .updates__input::placeholder {
+    color: var(--fg-dim);
+  }
+  .updates__input:hover {
+    border-color: var(--fg-muted);
+  }
+  .updates__input:focus {
+    outline: none;
+    border-color: var(--fg);
+  }
+  .updates__input:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .updates__submit {
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--bg);
+    background: var(--fg);
+    border: 1px solid var(--fg);
+    border-radius: 2px;
+    padding: 13px 26px;
+    cursor: pointer;
+    transition: background-color 160ms ease-out, color 160ms ease-out;
+  }
+  .updates__submit:hover {
+    background: transparent;
+    color: var(--fg);
+  }
+</style>
