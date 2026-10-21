@@ -31,11 +31,6 @@
 <footer class="site-footer">
   <div class="footer-inner">
 
-    <a class="brand" href="/">
-      <img src="/apollonia_logo_white_black.png" alt="Apollonia Space" class="footer-logo" />
-      <span class="footer-brand-name">Apollonia Space</span>
-    </a>
-
     <div class="fcol">
       <h5>EXPLORE</h5>
       <ul>
@@ -88,6 +83,10 @@
   </div>
 
   <div class="footer-base">
+    <a class="brand" href="/">
+      <img src="/apollonia_logo_white_black.png" alt="Apollonia Space" class="footer-logo" />
+      <span class="footer-brand-name">Apollonia Space</span>
+    </a>
     <small>© 2026 Apollonia Space. All rights reserved.</small>
   </div>
 </footer>
@@ -246,18 +245,15 @@
   .footer-inner {
     max-width: 1400px;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
+    display: flex;
     gap: 6rem;
-    align-items: start;
+    align-items: flex-start;
     padding-bottom: 4rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  @media (min-width: 1025px) {
-    .footer-inner > :nth-child(2) {
-      padding-left: 5rem;
-    }
+  .footer-inner > .fcol:first-child {
+    margin-left: 36%;
   }
 
   /* ─── Footer columns ─── */
@@ -303,7 +299,7 @@
     max-width: 1400px;
     margin: 2rem auto 0;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
   }
 
@@ -316,14 +312,14 @@
   }
 
   .footer-logo {
-    height: 48px;
+    height: 40px;
     width: auto;
     display: block;
   }
 
   .footer-brand-name {
     font-family: 'Montserrat', sans-serif;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 400;
     letter-spacing: -0.02em;
     text-transform: uppercase;
@@ -338,12 +334,15 @@
 
   @media (max-width: 1024px) {
     .footer-inner {
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem 2rem;
+      gap: 2rem;
     }
 
-    .footer-inner > .brand {
-      grid-column: 1 / -1;
+    .footer-inner > .fcol {
+      flex: 1;
+    }
+
+    .footer-inner > .fcol:first-child {
+      margin-left: 0;
     }
 
     .site-footer {
