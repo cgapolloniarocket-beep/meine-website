@@ -31,7 +31,10 @@
 <footer class="site-footer">
   <div class="footer-inner">
 
-    <div class="footer-spacer" aria-hidden="true"></div>
+    <a class="brand" href="/">
+      <img src="/apollonia_logo_white_black.png" alt="Apollonia Space" class="footer-logo" />
+      <span class="footer-brand-name">Apollonia Space</span>
+    </a>
 
     <div class="fcol">
       <h5>EXPLORE</h5>
@@ -85,10 +88,6 @@
   </div>
 
   <div class="footer-base">
-    <a class="brand" href="/">
-      <img src="/apollonia_logo_white_black.png" alt="Apollonia Space" class="footer-logo" />
-      <span class="footer-brand-name">Apollonia Space</span>
-    </a>
     <small>© 2026 Apollonia Space. All rights reserved.</small>
   </div>
 </footer>
@@ -304,7 +303,7 @@
     max-width: 1400px;
     margin: 2rem auto 0;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
   }
 
@@ -317,14 +316,14 @@
   }
 
   .footer-logo {
-    height: 40px;
+    height: 48px;
     width: auto;
     display: block;
   }
 
   .footer-brand-name {
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 400;
     letter-spacing: -0.02em;
     text-transform: uppercase;
@@ -343,8 +342,8 @@
       gap: 3rem 2rem;
     }
 
-    .footer-spacer {
-      display: none;
+    .footer-inner > .brand {
+      grid-column: 1 / -1;
     }
 
     .site-footer {
