@@ -1,10 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
-import { getImage } from 'astro:assets';
-import smokeSrc from '../assets/smokepurple.jpg';
-
-const smokeBg = await getImage({ src: smokeSrc, format: 'webp', width: 1920 });
 ---
 
 <Layout title="Apollonia – Coming Soon">
@@ -25,7 +21,7 @@ const smokeBg = await getImage({ src: smokeSrc, format: 'webp', width: 1920 });
   </section>
 </Layout>
 
-<style define:vars={{ smokeBgUrl: `url(${smokeBg.src})` }}>
+<style>
   :root {
     --intro-duration: 5s;
   }
@@ -33,12 +29,6 @@ const smokeBg = await getImage({ src: smokeSrc, format: 'webp', width: 1920 });
   .technology-page {
     min-height: 100vh;
     background-color: #030308;
-    background-image:
-      linear-gradient(rgba(3, 3, 8, 0.35), rgba(3, 3, 8, 0.35)),
-      var(--smokeBgUrl);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     display: flex;
     flex-direction: column;
     overflow: hidden;
