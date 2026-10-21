@@ -1,5 +1,5 @@
 ---
-// Footer.astro — Contact + Newsletter + Footer
+// Footer.astro — Contact + Footer
 // Drop into src/components/ and import in your layout.
 ---
 
@@ -31,47 +31,11 @@
 <footer class="site-footer">
   <div class="footer-inner">
 
-    <div class="newsletter">
-      <h3>Join the Apollonia Space community</h3>
-      <p class="lead">New episodes, space industry briefings and behind-the-scenes notes. Straight to your inbox.</p>
-
-      <div class="news-form" role="form" aria-label="Newsletter signup">
-        <input
-          type="email"
-          id="news-email"
-          placeholder="Type your email…"
-          aria-label="Email address"
-          autocomplete="email"
-          maxlength="254"
-          required
-        />
-        <input
-          type="text"
-          id="news-hp"
-          name="website"
-          autocomplete="off"
-          tabindex="-1"
-          aria-hidden="true"
-          class="news-hp"
-        />
-        <button id="news-submit" type="button">Subscribe</button>
-      </div>
-
-      <p class="news-status" id="news-status" role="status" aria-live="polite"></p>
-
-      <p class="fineprint">
-        By subscribing you agree to Substack's
-        <a href="https://substack.com/tos" target="_blank" rel="noopener">Terms of Use</a>,
-        <a href="https://substack.com/privacy" target="_blank" rel="noopener">Privacy Policy</a> and
-        <a href="https://substack.com/ccpa#personal-data-collected" target="_blank" rel="noopener">Information collection notice</a>.
-      </p>
-    </div>
-
     <div class="fcol">
       <h5>EXPLORE</h5>
       <ul>
         <li><a href="/">Home</a></li>
-        <li><a href="/podcast">Podcast</a></li>
+        <li><a href="/podcast">Channel</a></li>
         <li><a href="/pressnews">Press & News</a></li>
         <li><a href="/about">About Us</a></li>
         <li><a href="/imprint">Imprint</a></li>
@@ -126,92 +90,6 @@
     <small>© 2026 Apollonia Space. All rights reserved.</small>
   </div>
 </footer>
-
-<script>
-  (function () {
-    'use strict';
-
-    const el = {
-      email: document.getElementById('news-email'),
-      hp:    document.getElementById('news-hp'),
-      btn:   document.getElementById('news-submit'),
-      status:document.getElementById('news-status'),
-    };
-
-    if (!el.email || !el.btn || !el.status) return;
-
-    let lastSubmitTime = 0;
-    const COOLDOWN_MS = 3000;
-    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-
-    function setStatus(msg, isError) {
-      el.status.textContent = msg;
-      el.status.style.color = isError ? '#ef4444' : '#42A5F5';
-    }
-
-    function clearStatus() {
-      el.status.textContent = '';
-    }
-
-    async function subscribe() {
-      clearStatus();
-
-      const now = Date.now();
-      if (now - lastSubmitTime < COOLDOWN_MS) {
-        setStatus('One moment\u2026', true);
-        return;
-      }
-
-      const email = el.email.value.trim().toLowerCase();
-
-      if (!email) {
-        setStatus('Please enter your email address.', true);
-        return;
-      }
-      if (email.length > 254 || !EMAIL_RE.test(email)) {
-        setStatus('Please enter a valid email address.', true);
-        return;
-      }
-
-      lastSubmitTime = now;
-      el.btn.disabled = true;
-      el.btn.textContent = 'Subscribing\u2026';
-
-      try {
-        const res = await fetch('/api/subscribe', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: email,
-            website: el.hp ? el.hp.value : '',
-          }),
-        });
-
-        if (res.ok) {
-          setStatus('Thanks \u2014 you\u2019re subscribed.', false);
-          el.email.value = '';
-        } else if (res.status === 429) {
-          setStatus('Too many attempts. Please wait a moment.', true);
-        } else {
-          setStatus('Something went wrong. Please try again.', true);
-        }
-      } catch {
-        setStatus('Network error. Please try again.', true);
-      } finally {
-        el.btn.disabled = false;
-        el.btn.textContent = 'Subscribe';
-      }
-    }
-
-    el.btn.addEventListener('click', subscribe);
-    el.email.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        subscribe();
-      }
-    });
-  })();
-</script>
 
 <style>
   /* ─── Get in touch ─── */
@@ -368,116 +246,11 @@
     max-width: 1400px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 6rem;
+    grid-template-columns: repeat(2, max-content);
+    gap: clamp(4rem, 10vw, 10rem);
     align-items: start;
     padding-bottom: 4rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  /* ─── Newsletter ─── */
-  .newsletter h3 {
-    font-family: 'Barlow', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #ffffff;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-top: 0;
-    margin-bottom: 1rem;
-  }
-
-  .lead {
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.6);
-    line-height: 1.7;
-    margin-bottom: 2rem;
-  }
-
-  .news-form {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 0.25rem;
-  }
-
-  .news-form input[type="email"] {
-    flex: 1;
-    min-width: 0;
-    padding: 0.85rem 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.06);
-    color: #fff;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.9rem;
-    outline: none;
-    transition: border-color 0.25s ease;
-  }
-
-  .news-form input[type="email"]::placeholder {
-    color: rgba(255, 255, 255, 0.35);
-  }
-
-  .news-form input[type="email"]:focus {
-    border-color: #42A5F5;
-  }
-
-  .news-hp {
-    position: absolute;
-    left: -9999px;
-    width: 0;
-    height: 0;
-    opacity: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
-
-  .news-form button {
-    background: #ffffff;
-    color: #000;
-    border: none;
-    padding: 0.85rem 1.5rem;
-    border-radius: 6px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: background 0.3s, color 0.3s, opacity 0.3s;
-    white-space: nowrap;
-  }
-
-  .news-form button:hover {
-    background: #42A5F5;
-    color: #ffffff;
-  }
-
-  .news-form button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  .news-status {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.85rem;
-    color: #42A5F5;
-    min-height: 1.4em;
-    margin: 0.5rem 0 0.75rem;
-    transition: color 0.25s ease;
-  }
-
-  .fineprint {
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.3);
-    line-height: 1.6;
-  }
-
-  .fineprint a {
-    color: rgba(255, 255, 255, 0.5);
-    text-decoration: underline;
-  }
-
-  .fineprint a:hover {
-    color: #ffffff;
   }
 
   /* ─── Footer columns ─── */
@@ -556,20 +329,10 @@
     color: rgba(255, 255, 255, 0.3);
   }
 
-  @media (min-width: 1025px) {
-    .footer-inner > :nth-child(2) {
-      padding-left: 5rem;
-    }
-  }
-
   @media (max-width: 1024px) {
     .footer-inner {
       grid-template-columns: 1fr 1fr;
       gap: 3rem 2rem;
-    }
-
-    .newsletter {
-      grid-column: 1 / -1;
     }
 
     .site-footer {
@@ -590,25 +353,6 @@
 
     .footer-inner {
       gap: 2.5rem 1rem;
-    }
-
-    .newsletter h3 {
-      font-size: 1rem;
-      line-height: 1.2;
-    }
-
-    .lead {
-      font-size: 0.95rem;
-    }
-
-    .news-form {
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .news-form button {
-      width: 100%;
-      padding: 0.9rem 1.5rem;
     }
 
     .fcol h5 {
