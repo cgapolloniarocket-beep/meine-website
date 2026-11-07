@@ -1,61 +1,46 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
+import TokamakFieldLines from '../components/TokamakFieldLines.astro';
 ---
 
 <Layout title="Apollonia – Coming Soon">
   <section class="technology-page">
     <SiteHeader transition:persist />
 
-    <div class="tech-grid">
-      <div class="hero-text">
-        <h1>
-          PROTOTYPE IN PROGRESS.
-        </h1>
-      </div>
+    <div class="hero-text">
+      <h1>
+        PROTOTYPE
+        <br />
+        IN PROGRESS.
+      </h1>
+    </div>
 
-      <div class="plasma-viewport">
-        <div class="plasma-glow-overlay"></div>
-      </div>
+    <div class="tokamak-stage">
+      <TokamakFieldLines />
     </div>
   </section>
 </Layout>
 
 <style>
-  :root {
-    --intro-duration: 5s;
-  }
-
+  /* The title box matches the Home hero (index.astro) at every breakpoint,
+     so the headline sits in the same place on both pages. */
   .technology-page {
-    min-height: 100vh;
-    background-color: #030308;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  .tech-grid {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
     position: relative;
-    width: 100%;
-    max-width: 1440px;
-    margin: 0 auto;
-    padding: 0 2rem;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #000000;
   }
 
   .hero-text {
     position: relative;
     z-index: 4;
     pointer-events: none;
-    padding: 8rem 0 0 2rem;
-    align-self: start;
+    padding: 10rem 4rem 0;
   }
 
   h1 {
-    font-family: 'Barlow', 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'Barlow', sans-serif;
     font-size: clamp(2rem, 6vw, 5rem);
     font-weight: 800;
     line-height: 0.95;
@@ -66,117 +51,47 @@ import SiteHeader from '../components/SiteHeader.astro';
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
   }
 
-  .plasma-viewport {
-    position: relative;
-    width: 100%;
-    height: 85vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .plasma-glow-overlay {
+  /* Field lines on the right, where the globe sits on Home */
+  .tokamak-stage {
     position: absolute;
-    width: 950px;
-    height: 700px;
-    background: radial-gradient(
-      circle,
-      rgba(0, 130, 255, 0.22) 0%,
-      rgba(0, 40, 150, 0.06) 45%,
-      transparent 75%
-    );
-    filter: blur(90px);
-    z-index: 1;
-    pointer-events: none;
-    left: 45%;
-    top: 15%;
-    opacity: 0;
-    animation:
-      plasma-ambient-throb 12s ease-in-out infinite,
-      fade-in-glow 4s ease-out forwards;
+    z-index: 2;
+    top: 9rem;
+    bottom: 2rem;
+    left: 46%;
+    right: 2rem;
   }
 
-  @keyframes plasma-ambient-throb {
-    0%, 100% { opacity: 0.8; }
-    50%      { opacity: 1.0; }
-  }
-
-  @keyframes fade-in-glow {
-    0%   { opacity: 0; }
-    100% { opacity: 1; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .plasma-glow-overlay {
-      animation: none;
-      opacity: 1;
-    }
-  }
-
-  @media (max-width: 1024px) {
-    .tech-grid {
-      grid-template-columns: 1fr;
-      grid-template-rows: auto 1fr;
-      padding-top: 5rem;
-    }
-
+  @media (max-width: 768px) {
     .hero-text {
-      align-self: center;
-      padding: 9rem 0 0;
-      text-align: center;
-    }
-
-    .plasma-viewport {
-      height: 55vh;
-      min-height: 420px;
-    }
-
-    .plasma-glow-overlay {
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      width: 80vw;
-      height: 60vw;
-      max-width: 700px;
-      max-height: 520px;
-    }
-  }
-
-  @media (max-width: 640px) {
-    .technology-page {
-      min-height: 100svh;
-    }
-
-    .tech-grid {
-      padding: 4rem 1rem 0;
-      gap: 1rem;
+      padding: 8.5rem 1.5rem 0 2.5rem;
+      max-width: 58%;
     }
 
     h1 {
-      color: #ffffff;
-      font-size: clamp(1.9rem, 9vw, 2.8rem);
-      font-weight: 900;
-      text-shadow:
-        0 2px 12px rgba(0, 0, 0, 0.7),
-        0 0 30px rgba(0, 100, 255, 0.25);
-      -webkit-font-smoothing: antialiased;
+      font-size: 1.9rem;
+      line-height: 1.1;
     }
 
-    .plasma-viewport {
-      height: 50vh;
-      min-height: 340px;
-    }
-
-    .plasma-glow-overlay {
-      width: 95vw;
-      height: 70vw;
-      filter: blur(60px);
+    .tokamak-stage {
+      top: 16.5rem;
+      left: 1rem;
+      right: 1rem;
+      bottom: 1.5rem;
     }
   }
 
   @media (max-width: 380px) {
-    .plasma-viewport {
-      min-height: 300px;
+    .hero-text {
+      padding: 6.5rem 1.2rem 0;
+      max-width: 60%;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+    }
+
+    .tokamak-stage {
+      top: 12.5rem;
     }
   }
 </style>
