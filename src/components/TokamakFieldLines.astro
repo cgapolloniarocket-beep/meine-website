@@ -29,25 +29,21 @@
 </script>
 
 <style>
-  /* view + caption as one centred block; the caption sits under the animation */
+  /* square view with the caption right below it; the page sets the width */
   .tokamak {
     position: relative;
     margin: 0;
     width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     gap: 0.5rem;
   }
 
   .tokamak-view {
     position: relative;
-    flex: 0 0 auto;
-    height: 60%;
+    width: 100%;
     aspect-ratio: 1 / 1;
-    max-width: 100%;
   }
 
   .tokamak-title {
@@ -59,18 +55,5 @@
     color: #ffffff;
     text-align: center;
     pointer-events: none;
-  }
-
-  /* phones: square view across the width, caption right below */
-  @media (max-width: 768px) {
-    .tokamak {
-      justify-content: flex-start;
-    }
-
-    .tokamak-view {
-      height: auto;
-      width: 100%;
-      max-height: calc(100% - 3rem);
-    }
   }
 </style>

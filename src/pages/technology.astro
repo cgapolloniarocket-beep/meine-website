@@ -27,7 +27,7 @@ import TokamakFieldLines from '../components/TokamakFieldLines.astro';
      so the headline sits in the same place on both pages. */
   .technology-page {
     position: relative;
-    height: 100vh;
+    min-height: 100vh;
     overflow: hidden;
     background-color: #000000;
   }
@@ -51,14 +51,12 @@ import TokamakFieldLines from '../components/TokamakFieldLines.astro';
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
   }
 
-  /* Field lines on the right, where the globe sits on Home */
+  /* Field lines under the title, left-aligned with it, about 4 cm below (8rem + the view's inner margin) */
   .tokamak-stage {
-    position: absolute;
+    position: relative;
     z-index: 2;
-    top: 9rem;
-    bottom: 2rem;
-    left: 46%;
-    right: 2rem;
+    width: clamp(260px, 30vw, 460px);
+    margin: 8rem 0 4rem 4rem;
   }
 
   @media (max-width: 768px) {
@@ -73,10 +71,9 @@ import TokamakFieldLines from '../components/TokamakFieldLines.astro';
     }
 
     .tokamak-stage {
-      top: 16.5rem;
-      left: 1rem;
-      right: 1rem;
-      bottom: 1.5rem;
+      width: auto;
+      max-width: 420px;
+      margin: 2.5rem 1.5rem 2rem 2.5rem;
     }
   }
 
@@ -91,7 +88,7 @@ import TokamakFieldLines from '../components/TokamakFieldLines.astro';
     }
 
     .tokamak-stage {
-      top: 12.5rem;
+      margin: 2rem 1.2rem 2rem;
     }
   }
 </style>
