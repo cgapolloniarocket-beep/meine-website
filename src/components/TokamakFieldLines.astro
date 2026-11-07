@@ -4,8 +4,8 @@
 ---
 
 <figure class="tokamak">
-  <figcaption class="tokamak-title">Spherical Tokamak</figcaption>
   <div class="tokamak-view" data-tokamak></div>
+  <figcaption class="tokamak-title">Spherical Tokamak</figcaption>
 </figure>
 
 <script>
@@ -29,6 +29,7 @@
 </script>
 
 <style>
+  /* view + caption as one centred block; the caption sits under the animation */
   .tokamak {
     position: relative;
     margin: 0;
@@ -36,6 +37,17 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .tokamak-view {
+    position: relative;
+    flex: 0 0 auto;
+    height: 60%;
+    aspect-ratio: 1 / 1;
+    max-width: 100%;
   }
 
   .tokamak-title {
@@ -49,20 +61,16 @@
     pointer-events: none;
   }
 
-  .tokamak-view {
-    position: relative;
-    flex: 1 1 auto;
-    min-height: 0;
-  }
-
-  /* phones: caption sits right above a square view */
+  /* phones: square view across the width, caption right below */
   @media (max-width: 768px) {
+    .tokamak {
+      justify-content: flex-start;
+    }
+
     .tokamak-view {
-      flex: 0 1 auto;
+      height: auto;
       width: 100%;
-      aspect-ratio: 1 / 1;
-      max-height: 100%;
-      margin-top: 0.5rem;
+      max-height: calc(100% - 3rem);
     }
   }
 </style>
