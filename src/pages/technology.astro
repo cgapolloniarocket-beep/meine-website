@@ -30,9 +30,6 @@ import Applications from '../components/Applications.astro';
 
       <Applications />
 
-      <!-- solid links with a travelling light from the tokamak to each vehicle (drawn by vehicles.js) -->
-      <svg class="connectors" data-connectors aria-hidden="true"></svg>
-
     </div>
   </section>
 </Layout>
@@ -59,52 +56,6 @@ import Applications from '../components/Applications.astro';
     min-width: 0;
   }
 
-  .connectors {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    pointer-events: none;
-    overflow: visible;
-  }
-
-  .connectors :global(.c-base) {
-    fill: none;
-    stroke: #a28aee;
-    stroke-width: 1.2;
-    stroke-opacity: 0.28;
-    transition: stroke-opacity 0.3s, opacity 0.3s;
-  }
-
-  .connectors :global(.c-pulse) {
-    fill: none;
-    stroke: #c8b9ff;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-dasharray: 60 940;
-    animation: c-run 3.2s linear infinite;
-    transition: opacity 0.3s;
-  }
-
-  .connectors :global(.c-base.is-active) {
-    stroke-opacity: 0.65;
-  }
-
-  .connectors :global(.is-dim) {
-    opacity: 0.25;
-  }
-
-  @keyframes c-run {
-    from { stroke-dashoffset: 60; }
-    to { stroke-dashoffset: -940; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .connectors :global(.c-pulse) {
-      display: none;
-    }
-  }
 
   .hero-text {
     position: relative;
@@ -139,9 +90,6 @@ import Applications from '../components/Applications.astro';
       grid-template-columns: minmax(0, 1fr);
     }
 
-    .connectors {
-      display: none;
-    }
   }
 
   @media (max-width: 768px) {

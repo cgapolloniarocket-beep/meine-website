@@ -11,10 +11,8 @@
      detail   — seams, cells, ribs: thin and dim
      flow     — nozzle field lines with travelling pulses
      depth    — lines fade with distance from the camera
-   One WebGL canvas renders all three views (scissor). Solid SVG links with a
-   travelling light run from the tokamak to each engine; hovering a vehicle
-   lights its link and is broadcast as 'apollonia:app-hover' so the tokamak
-   lights up with it.
+   One WebGL canvas renders all three views (scissor). Hovering a vehicle
+   is broadcast as 'apollonia:app-hover' so the tokamak lights up with it.
    ========================================================================== */
 import * as THREE from 'three';
 import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
@@ -387,50 +385,14 @@ export function mountVehicles(root) {
   let hovered = null;
   // tell the tokamak view, so it lights up together with the hovered vehicle
   const announce = (kind) => window.dispatchEvent(new CustomEvent('apollonia:app-hover', { detail: kind }));
-  const onEnter = (e) => { hovered = e.currentTarget.dataset.app; announce(hovered); markLinks(); };
-  const onLeave = () => { hovered = null; announce(null); markLinks(); };
+  const onEnter = (e) => { hovered = e.currentTarget.dataset.app; announce(hovered); };
+  const onLeave = () => { hovered = null; announce(null); };
   rows.forEach((r) => { r?.addEventListener('pointerenter', onEnter); r?.addEventListener('pointerleave', onLeave); });
 
-  /* links: faint solid curves from the tokamak to each engine, each with one
-     soft light travelling along it; the hovered vehicle's link lights up */
-  const NS = 'http://www.w3.org/2000/svg';
-  const svg = document.querySelector('[data-connectors]');
-  const tok = document.querySelector('[data-tokamak]');
-  const links = [];
-  if (svg) views.forEach((v, i) => {
-    const mk = (cls) => { const p = document.createElementNS(NS, 'path'); p.setAttribute('class', cls); svg.appendChild(p); return p; };
-    const base = mk('c-base'), pulse = mk('c-pulse');
-    pulse.setAttribute('pathLength', '1000');
-    pulse.style.animationDelay = `${(-i * 1.07).toFixed(2)}s`;
-    links.push({ kind: v.kind, el: v.el, base, pulse });
-  });
-  function markLinks() {
-    for (const l of links) {
-      const on = hovered === l.kind, dim = !!hovered && !on;
-      for (const p of [l.base, l.pulse]) { p.classList.toggle('is-active', on); p.classList.toggle('is-dim', dim); }
-    }
-  }
-  function updateLinks() {
-    if (!svg || !tok || !links.length) return;
-    const s = svg.getBoundingClientRect();
-    if (s.width === 0) return;
-    svg.setAttribute('viewBox', `0 0 ${s.width} ${s.height}`);
-    const t = tok.getBoundingClientRect();
-    const sx = t.right - t.width * 0.12 - s.left, sy = t.top + t.height * 0.5 - s.top;
-    for (const l of links) {
-      const a = l.el.getBoundingClientRect();
-      const ex = a.left + a.width * 0.04 - s.left, ey = a.top + a.height * 0.5 - s.top;
-      const dx = Math.max(60, (ex - sx) * 0.5);
-      const d = `M ${sx.toFixed(1)} ${sy.toFixed(1)} C ${(sx + dx).toFixed(1)} ${sy.toFixed(1)}, ${(ex - dx).toFixed(1)} ${ey.toFixed(1)}, ${ex.toFixed(1)} ${ey.toFixed(1)}`;
-      l.base.setAttribute('d', d); l.pulse.setAttribute('d', d);
-    }
-  }
-
-  const ro = new ResizeObserver(() => { resize(); updateLinks(); });
+  const ro = new ResizeObserver(resize);
   ro.observe(holder);
-  if (svg?.parentElement) ro.observe(svg.parentElement);
-  document.fonts?.ready?.then(() => { resize(); updateLinks(); });
-  resize(); updateLinks();
+  document.fonts?.ready?.then(resize);
+  resize();
 
   let visible = true;
   const io = new IntersectionObserver((en) => { visible = en[0]?.isIntersecting ?? true; });
@@ -471,7 +433,6 @@ export function mountVehicles(root) {
       rows.forEach((r) => { r?.removeEventListener('pointerenter', onEnter); r?.removeEventListener('pointerleave', onLeave); });
       for (const v of views) for (const L of Object.keys(v.layers)) { v.layers[L].geo.dispose(); v.layers[L].mat.dispose(); }
       announce(null);
-      links.forEach((l) => { l.base.remove(); l.pulse.remove(); });
       renderer.dispose(); canvas.remove();
     },
   };
