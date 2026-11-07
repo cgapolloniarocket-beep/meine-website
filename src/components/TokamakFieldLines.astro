@@ -66,6 +66,9 @@
     letter-spacing: -0.01em;
     text-transform: uppercase;
     white-space: nowrap;
+    /* the view keeps ~11% empty space under the ring; pull the caption up into it
+       (% margins follow the figure width = view height) */
+    margin-top: calc(-10% + 0.25rem);
     color: #ffffff;
     text-align: center;
     pointer-events: none;
