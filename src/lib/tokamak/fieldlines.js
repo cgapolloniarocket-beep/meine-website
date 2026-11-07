@@ -121,6 +121,19 @@ export function mountTokamak(host) {
   const mat = new LineMaterial({ color: new THREE.Color(LINE), linewidth: 2, depthTest: false, depthWrite: false });
   const lines = new LineSegments2(geom, mat);
   const TIME = { value: 0 };
+  const LIFT = { value: 0 };                 // 0 at rest, 1 while a vehicle is hovered
+  let liftTarget = 0;
+  const onAppHover = (e) => { liftTarget = e.detail ? 1 : 0; };
+  window.addEventListener('apollonia:app-hover', onAppHover);
+  const liftPatch = (sh) => {
+    const hook = 'gl_FragColor = vec4( diffuseColor.rgb, alpha );';
+    if (!sh.fragmentShader.includes(hook)) return;
+    sh.fragmentShader = sh.fragmentShader
+      .replace('void main() {', 'uniform float uLift;\nvoid main() {')
+      .replace(hook, 'diffuseColor.rgb = mix(diffuseColor.rgb, vec3(1.0), 0.28 * uLift);\n\t\t\t' + hook);
+    sh.uniforms.uLift = LIFT;
+  };
+  mat.onBeforeCompile = liftPatch;
   if (!reduceMotion) {
     mat.dashed = true; mat.dashScale = 1; mat.dashSize = 1e9; mat.gapSize = 0;
     const db = new THREE.InstancedInterleavedBuffer(geo.dist, 2, 1);
@@ -128,6 +141,7 @@ export function mountTokamak(host) {
     geom.setAttribute('instanceDistanceEnd', new THREE.InterleavedBufferAttribute(db, 1, 1));
     const flow = new THREE.Vector2(CONFIG.flow.spacing, CONFIG.flow.speed);
     mat.onBeforeCompile = (sh) => {
+      liftPatch(sh);
       const patched = flowPatch(sh.fragmentShader);
       if (!patched) return;                    // unknown three version: stay static
       sh.fragmentShader = patched;
@@ -200,6 +214,8 @@ export function mountTokamak(host) {
     raf = requestAnimationFrame(loop);
     if (!visible) return;
     TIME.value = (now - t0) / 1000;
+    const dl = liftTarget - LIFT.value;
+    if (Math.abs(dl) > 0.001) { LIFT.value += dl * 0.12; dirty = true; }
     const moved = controls ? controls.update() : false;
     if (moved || dirty || !reduceMotion) { renderer.render(scene, camera); dirty = false; }
   };
@@ -212,6 +228,7 @@ export function mountTokamak(host) {
   return {
     destroy() {
       cancelAnimationFrame(raf);
+      window.removeEventListener('apollonia:app-hover', onAppHover);
       ro.disconnect(); io.disconnect();
       controls?.dispose();
       geom.dispose(); mat.dispose();

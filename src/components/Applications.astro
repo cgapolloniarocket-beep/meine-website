@@ -109,21 +109,20 @@ const items = [
     width: 100%;
   }
 
-  /* the cruiser gets a wider frame so it reads as the largest vehicle */
-  .app[data-app='spacecraft'] {
-    grid-template-columns: minmax(0, 56%) minmax(0, 1fr);
-  }
 
   .app-text {
     min-width: 0;
+    container-type: inline-size;
   }
 
   .app-name {
     margin: 0 0 0.35rem;
     font-family: 'Barlow', sans-serif;
     font-weight: 800;
-    font-size: clamp(1.15rem, 1.7vw, 1.6rem);
+    font-size: 1.1rem;
+    font-size: clamp(0.95rem, 6.8cqi, 1.4rem);   /* scales with its column so every name stays on one line */
     line-height: 1.05;
+    white-space: nowrap;
     letter-spacing: -0.01em;
     text-transform: uppercase;
     color: #ffffff;
@@ -150,6 +149,12 @@ const items = [
     pointer-events: none;
   }
 
+  @media (max-width: 1024px) {
+    .applications {
+      padding: 1rem 4rem 4rem;
+    }
+  }
+
   @media (max-width: 768px) {
     .applications {
       padding: 1rem 1.5rem 3rem 2.5rem;
@@ -166,8 +171,7 @@ const items = [
   }
 
   @media (max-width: 560px) {
-    .app,
-    .app[data-app='spacecraft'] {
+    .app {
       grid-template-columns: minmax(0, 1fr);
       gap: 0.5rem;
       padding: 1.1rem 0;

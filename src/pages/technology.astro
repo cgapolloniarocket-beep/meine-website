@@ -30,8 +30,9 @@ import Applications from '../components/Applications.astro';
 
       <Applications />
 
-      <!-- flowing connectors from the tokamak to each application (drawn by vehicles.js) -->
+      <!-- solid links with a travelling light from the tokamak to each vehicle (drawn by vehicles.js) -->
       <svg class="connectors" data-connectors aria-hidden="true"></svg>
+
     </div>
   </section>
 </Layout>
@@ -68,22 +69,40 @@ import Applications from '../components/Applications.astro';
     overflow: visible;
   }
 
-  .connectors :global(.connector) {
+  .connectors :global(.c-base) {
     fill: none;
     stroke: #a28aee;
-    stroke-opacity: 0.4;
     stroke-width: 1.2;
-    stroke-dasharray: 14 18;
-    animation: connector-flow 1.8s linear infinite;
+    stroke-opacity: 0.28;
+    transition: stroke-opacity 0.3s, opacity 0.3s;
   }
 
-  @keyframes connector-flow {
-    to { stroke-dashoffset: -64; }
+  .connectors :global(.c-pulse) {
+    fill: none;
+    stroke: #c8b9ff;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-dasharray: 60 940;
+    animation: c-run 3.2s linear infinite;
+    transition: opacity 0.3s;
+  }
+
+  .connectors :global(.c-base.is-active) {
+    stroke-opacity: 0.65;
+  }
+
+  .connectors :global(.is-dim) {
+    opacity: 0.25;
+  }
+
+  @keyframes c-run {
+    from { stroke-dashoffset: 60; }
+    to { stroke-dashoffset: -940; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .connectors :global(.connector) {
-      animation: none;
+    .connectors :global(.c-pulse) {
+      display: none;
     }
   }
 
@@ -106,15 +125,16 @@ import Applications from '../components/Applications.astro';
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
   }
 
-  /* Field lines under the title, shifted right of its left edge, about 2 cm below (3rem + the view's inner margin) */
+  /* Field lines under the title, moved towards the page centre, about 2 cm below (3rem + the view's inner margin) */
   .tokamak-stage {
     position: relative;
     z-index: 2;
     width: clamp(260px, 30vw, 460px);
-    margin: 3rem 0 4rem 8rem;
+    margin: 3rem 0 4rem 12rem;
   }
 
-  @media (max-width: 768px) {
+  /* tablets and narrower: applications move below the tokamak */
+  @media (max-width: 1024px) {
     .tech-layout {
       grid-template-columns: minmax(0, 1fr);
     }
@@ -122,6 +142,9 @@ import Applications from '../components/Applications.astro';
     .connectors {
       display: none;
     }
+  }
+
+  @media (max-width: 768px) {
 
     .hero-text {
       padding: 8.5rem 1.5rem 0 2.5rem;
