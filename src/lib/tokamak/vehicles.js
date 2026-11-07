@@ -11,8 +11,8 @@
      detail   — seams, cells, ribs: thin and dim
      flow     — nozzle field lines with travelling pulses
      depth    — lines fade with distance from the camera
-   One WebGL canvas renders all three views (scissor). Hovering a vehicle
-   is broadcast as 'apollonia:app-hover' so the tokamak lights up with it.
+   One WebGL canvas renders all three views (scissor). A quiet SVG line runs
+   from the tokamak to the middle node of the list's vertical rail.
    ========================================================================== */
 import * as THREE from 'three';
 import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
@@ -384,15 +384,37 @@ export function mountVehicles(root) {
   const rows = arts.map((a) => a.closest('[data-app]'));
   let hovered = null;
   // tell the tokamak view, so it lights up together with the hovered vehicle
-  const announce = (kind) => window.dispatchEvent(new CustomEvent('apollonia:app-hover', { detail: kind }));
-  const onEnter = (e) => { hovered = e.currentTarget.dataset.app; announce(hovered); };
-  const onLeave = () => { hovered = null; announce(null); };
+  const onEnter = (e) => { hovered = e.currentTarget.dataset.app; };
+  const onLeave = () => { hovered = null; };
   rows.forEach((r) => { r?.addEventListener('pointerenter', onEnter); r?.addEventListener('pointerleave', onLeave); });
 
-  const ro = new ResizeObserver(resize);
+  /* one quiet line from the tokamak to the middle node of the rail */
+  const railSvg = document.querySelector('[data-rail-link]');
+  const tok = document.querySelector('[data-tokamak]');
+  let railPath = null;
+  if (railSvg && tok && rows.length) {
+    railPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    railSvg.appendChild(railPath);
+  }
+  function updateRail() {
+    if (!railPath) return;
+    const s = railSvg.getBoundingClientRect();
+    if (s.width === 0) return;
+    railSvg.setAttribute('viewBox', `0 0 ${s.width} ${s.height}`);
+    const t = tok.getBoundingClientRect();
+    const mid = rows[Math.floor(rows.length / 2)].getBoundingClientRect();
+    const remPx = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+    const sx = t.right - t.width * 0.12 - s.left, sy = t.top + t.height * 0.5 - s.top;
+    const ex = mid.left - 1.4 * remPx - s.left, ey = mid.top + mid.height * 0.5 - s.top;
+    const dx = Math.max(40, (ex - sx) * 0.5);
+    railPath.setAttribute('d', `M ${sx.toFixed(1)} ${sy.toFixed(1)} C ${(sx + dx).toFixed(1)} ${sy.toFixed(1)}, ${(ex - dx).toFixed(1)} ${ey.toFixed(1)}, ${ex.toFixed(1)} ${ey.toFixed(1)}`);
+  }
+
+  const ro = new ResizeObserver(() => { resize(); updateRail(); });
   ro.observe(holder);
-  document.fonts?.ready?.then(resize);
-  resize();
+  if (railSvg?.parentElement) ro.observe(railSvg.parentElement);
+  document.fonts?.ready?.then(() => { resize(); updateRail(); });
+  resize(); updateRail();
 
   let visible = true;
   const io = new IntersectionObserver((en) => { visible = en[0]?.isIntersecting ?? true; });
@@ -432,7 +454,7 @@ export function mountVehicles(root) {
       cancelAnimationFrame(raf); ro.disconnect(); io.disconnect();
       rows.forEach((r) => { r?.removeEventListener('pointerenter', onEnter); r?.removeEventListener('pointerleave', onLeave); });
       for (const v of views) for (const L of Object.keys(v.layers)) { v.layers[L].geo.dispose(); v.layers[L].mat.dispose(); }
-      announce(null);
+      railPath?.remove();
       renderer.dispose(); canvas.remove();
     },
   };

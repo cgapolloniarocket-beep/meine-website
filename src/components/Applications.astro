@@ -86,9 +86,50 @@ const items = [
   .apps-list {
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 0 0 0 1.75rem;
     display: flex;
     flex-direction: column;
+  }
+
+  /* one thin vertical rail down the list, one node per vehicle */
+  .app {
+    position: relative;
+  }
+
+  .app::after {
+    content: '';
+    position: absolute;
+    left: -1.4rem;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: rgba(162, 138, 238, 0.45);
+  }
+
+  .app:first-child::after {
+    top: 50%;
+  }
+
+  .app:last-child::after {
+    bottom: 50%;
+  }
+
+  .app::before {
+    content: '';
+    position: absolute;
+    left: calc(-1.4rem - 3.5px);
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    margin-top: -4px;
+    border-radius: 50%;
+    background: #a28aee;
+    transition: transform 0.3s, background-color 0.3s;
+  }
+
+  .app:hover::before {
+    transform: scale(1.5);
+    background: #c8b9ff;
   }
 
   .app {
