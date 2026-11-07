@@ -57,12 +57,15 @@
     aspect-ratio: 1 / 1;
   }
 
+  /* same type as the vehicle names in Applications (size set by the page) */
   .tokamak-title {
     font-family: 'Barlow', sans-serif;
-    font-weight: 400;
-    font-size: clamp(1.1rem, 2.1vw, 2rem);
-    line-height: 1.1;
-    letter-spacing: 0.01em;
+    font-weight: 800;
+    font-size: var(--item-title-size, 1.25rem);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    white-space: nowrap;
     color: #ffffff;
     text-align: center;
     pointer-events: none;

@@ -114,8 +114,9 @@ import Applications from '../components/Applications.astro';
       --rows: calc(1.25 * clamp(260px, 30vw, 460px));   /* height of the three vehicle rows */
       --stage: calc(0.7 * var(--rows));          /* tokamak view: same size ratio to the vehicles as before */
       --gap: 3rem;
-      --eyebrow-nudge: calc(0.175 * var(--fs) - 0.29rem);
       --lede-nudge: 0px;
+      /* = .app-name size (6.8cqi of its text column), so the tokamak caption matches the vehicle names */
+      --item-title-size: clamp(0.8rem, calc(1.836vw - 0.3329rem), 1.4rem);
     }
 
     .tokamak-stage {
@@ -128,6 +129,7 @@ import Applications from '../components/Applications.astro';
   @media (max-width: 1024px) {
     .tech-layout {
       grid-template-columns: minmax(0, 1fr);
+      --item-title-size: clamp(0.8rem, calc(3.672vw - 0.443rem), 1.4rem);
     }
 
     .rail-link {
@@ -137,6 +139,9 @@ import Applications from '../components/Applications.astro';
   }
 
   @media (max-width: 768px) {
+    .tech-layout {
+      --item-title-size: clamp(0.8rem, calc(3.944vw - 0.288rem), 1.4rem);
+    }
 
     .hero-text {
       padding: 8.5rem 1.5rem 0 2.5rem;
@@ -155,7 +160,16 @@ import Applications from '../components/Applications.astro';
     }
   }
 
+  @media (max-width: 560px) {
+    .tech-layout {
+      --item-title-size: clamp(0.8rem, calc(6.8vw - 0.391rem), 1.4rem);
+    }
+  }
+
   @media (max-width: 380px) {
+    .tech-layout {
+      --item-title-size: clamp(0.8rem, calc(6.8vw - 0.2822rem), 1.4rem);
+    }
     .hero-text {
       padding: 6.5rem 1.2rem 0;
       max-width: 60%;

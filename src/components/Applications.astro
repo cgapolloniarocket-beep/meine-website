@@ -73,7 +73,7 @@ const items = [
     font-weight: 600;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: #a28aee;
+    color: #ffffff;
   }
 
   .apps-lede {
@@ -194,11 +194,20 @@ const items = [
       height: var(--band, auto);
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-end;
     }
 
+    /* the label sits on the connector line, midway between the tokamak's
+       outer field lines and the rail (same geometry as technology.astro) */
     .apps-eyebrow {
-      margin-top: var(--eyebrow-nudge, 0px);
+      position: absolute;
+      left: calc(-25% + 2.0125rem + 0.21 * var(--stage, 0px));
+      top: calc(10rem + var(--band, 0px) + var(--gap, 0px) + var(--rows, 0px) / 2);
+      transform: translate(-50%, calc(-100% - 0.35rem));
+      font-size: clamp(0.62rem, 0.85vw, 0.8rem);
+      letter-spacing: 0.2em;
+      white-space: nowrap;
+      pointer-events: none;
     }
 
     .apps-lede {
