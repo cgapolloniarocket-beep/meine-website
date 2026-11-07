@@ -106,7 +106,7 @@ function fieldLineSegments(eq, psiN, turns, qTarget, sceneScale, kMeet, nth = NT
 
 /* Flow shader patch for three's LineMaterial: darker pulses travel along the
    line toward its meeting point. Returns null if the shader text is unknown. */
-function flowPatch(fs) {
+export function flowPatch(fs) {
   const steps = [
     ['uniform float linewidth;', 'uniform float linewidth;\nuniform float uTime;\nuniform vec2 uFlow;'],
     ['if ( vUv.y < - 1.0 || vUv.y > 1.0 ) discard; // discard endcaps', ''],

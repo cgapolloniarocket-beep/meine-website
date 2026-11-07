@@ -1,0 +1,160 @@
+---
+// Applications.astro — the three mission classes the thruster is built for.
+// Concept illustrations (src/lib/tokamak/vehicles.js); no product claims.
+const items = [
+  { kind: 'satellite', name: 'Satellites', text: 'Orbit raising, station-keeping and end-of-life deorbit.' },
+  { kind: 'cargo', name: 'Interplanetary Cargo', text: 'Moving freight between Earth orbit, the Moon and Mars.' },
+  { kind: 'spacecraft', name: 'Interplanetary Spacecraft', text: 'Deep-space transfer for science and exploration missions.' },
+];
+---
+
+<aside class="applications" aria-labelledby="applications-title">
+  <p class="apps-eyebrow" id="applications-title">Applications</p>
+  <p class="apps-lede">One engine. Three missions.</p>
+  <ol class="apps-list">
+    {items.map((it) => (
+      <li class="app" data-app={it.kind}>
+        <div class="app-art" data-app-art={it.kind} aria-hidden="true"></div>
+        <div class="app-text">
+          <h2 class="app-name">{it.name}</h2>
+          <p class="app-line">{it.text}</p>
+        </div>
+      </li>
+    ))}
+  </ol>
+  <div class="apps-canvas" data-apps-canvas aria-hidden="true"></div>
+</aside>
+
+<script>
+  let api: { destroy(): void } | null = null;
+
+  async function mountApplications() {
+    const root = document.querySelector<HTMLElement>('.applications');
+    if (!root || root.dataset.mounted === 'true') return;
+    root.dataset.mounted = 'true';
+    const { mountVehicles } = await import('../lib/tokamak/vehicles.js');
+    if (!root.isConnected) return;
+    api = mountVehicles(root);
+  }
+
+  document.addEventListener('astro:page-load', mountApplications);
+  document.addEventListener('astro:before-swap', () => {
+    api?.destroy();
+    api = null;
+  });
+</script>
+
+<style>
+  .applications {
+    position: relative;
+    z-index: 3;
+    padding: 10rem 4rem 4rem 1rem;
+  }
+
+  .apps-eyebrow {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #a28aee;
+  }
+
+  .apps-lede {
+    margin: 0.4rem 0 1.5rem;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 400;
+    font-size: clamp(1.2rem, 1.8vw, 1.7rem);
+    line-height: 1.15;
+    color: #ffffff;
+  }
+
+  .apps-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .app {
+    display: grid;
+    grid-template-columns: minmax(0, 46%) minmax(0, 1fr);
+    align-items: center;
+    gap: 1.25rem;
+    padding: 0.9rem 0;
+    border-top: 1px solid rgba(162, 138, 238, 0.18);
+  }
+
+  .app:last-child {
+    border-bottom: 1px solid rgba(162, 138, 238, 0.18);
+  }
+
+  .app-art {
+    aspect-ratio: 16 / 10;
+    width: 100%;
+  }
+
+  /* the cruiser gets a wider frame so it reads as the largest vehicle */
+  .app[data-app='spacecraft'] {
+    grid-template-columns: minmax(0, 56%) minmax(0, 1fr);
+  }
+
+  .app-text {
+    min-width: 0;
+  }
+
+  .app-name {
+    margin: 0 0 0.35rem;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.15rem, 1.7vw, 1.6rem);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: #ffffff;
+    transition: color 0.3s;
+  }
+
+  .app:hover .app-name {
+    color: #c8b9ff;
+  }
+
+  .app-line {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.72);
+    max-width: 32ch;
+  }
+
+  .apps-canvas {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    .applications {
+      padding: 1rem 1.5rem 3rem 2.5rem;
+    }
+
+    .app {
+      grid-template-columns: minmax(0, 42%) minmax(0, 1fr);
+      gap: 0.9rem;
+    }
+
+    .app-line {
+      font-size: 0.85rem;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .applications {
+      padding: 1rem 1.2rem 3rem;
+    }
+  }
+</style>
