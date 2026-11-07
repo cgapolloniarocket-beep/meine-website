@@ -103,6 +103,27 @@ import Applications from '../components/Applications.astro';
     margin: 3rem 0 4rem 12rem;
   }
 
+  /* desktop: two shared bands. Band 1 = title | applications header (same top
+     and bottom line); band 2 = tokamak | list, with the tokamak centred on the
+     middle vehicle so the connector runs straight. The tokamak sits midway
+     between the title's left edge and the rail. */
+  @media (min-width: 1025px) {
+    .tech-layout {
+      --fs: clamp(2rem, 6vw, 5rem);              /* = h1 font-size */
+      --band: calc(1.9 * var(--fs));             /* two title lines at line-height 0.95 */
+      --rows: calc(1.25 * clamp(260px, 30vw, 460px));   /* height of the three vehicle rows */
+      --stage: calc(0.7 * var(--rows));          /* tokamak view: same size ratio to the vehicles as before */
+      --gap: 3rem;
+      --eyebrow-nudge: calc(0.175 * var(--fs) - 0.29rem);
+      --lede-nudge: 0px;
+    }
+
+    .tokamak-stage {
+      width: var(--stage);
+      margin: calc(var(--gap) + (var(--rows) - var(--stage)) / 2) 0 4rem calc(50% + 2.675rem - var(--stage) / 2);
+    }
+  }
+
   /* tablets and narrower: applications move below the tokamak */
   @media (max-width: 1024px) {
     .tech-layout {

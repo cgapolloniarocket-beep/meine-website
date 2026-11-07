@@ -9,8 +9,10 @@ const items = [
 ---
 
 <section class="applications" aria-labelledby="applications-title">
-  <h2 class="apps-eyebrow" id="applications-title">Applications</h2>
-  <p class="apps-lede">One engine. Three missions.</p>
+  <header class="apps-head">
+    <h2 class="apps-eyebrow" id="applications-title">Applications</h2>
+    <p class="apps-lede">One engine. <br class="lede-br" />Three missions.</p>
+  </header>
   <ol class="apps-list">
     {items.map((it) => (
       <li class="app" data-app={it.kind}>
@@ -138,11 +140,6 @@ const items = [
     align-items: center;
     gap: 1.25rem;
     padding: 0.9rem 0;
-    border-top: 1px solid rgba(162, 138, 238, 0.18);
-  }
-
-  .app:last-child {
-    border-bottom: 1px solid rgba(162, 138, 238, 0.18);
   }
 
   .app-art {
@@ -161,7 +158,7 @@ const items = [
     font-family: 'Barlow', sans-serif;
     font-weight: 800;
     font-size: 1.1rem;
-    font-size: clamp(0.95rem, 6.8cqi, 1.4rem);   /* scales with its column so every name stays on one line */
+    font-size: clamp(0.8rem, 6.8cqi, 1.4rem);   /* scales with its column so every name stays on one line */
     line-height: 1.05;
     white-space: nowrap;
     letter-spacing: -0.01em;
@@ -190,7 +187,57 @@ const items = [
     pointer-events: none;
   }
 
+  /* desktop: header shares the title's band, the list shares the tokamak's band
+     (sizes come from technology.astro; without them the list just flows) */
+  @media (min-width: 1025px) {
+    .apps-head {
+      height: var(--band, auto);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .apps-eyebrow {
+      margin-top: var(--eyebrow-nudge, 0px);
+    }
+
+    .apps-lede {
+      margin: 0 0 var(--lede-nudge, 0px);
+      font-size: calc(0.42 * var(--fs, 3rem));   /* two lines that mirror the title's two lines */
+      line-height: 1.08;
+    }
+
+    .apps-list {
+      height: var(--rows, auto);
+      margin-top: var(--gap, 1.5rem);
+      display: grid;
+      grid-template-rows: repeat(3, minmax(0, 1fr));
+    }
+
+    .app {
+      padding: 0.4rem 0;
+    }
+
+    .app-art {
+      aspect-ratio: auto;
+      align-self: stretch;
+      min-height: 0;
+    }
+  }
+
   @media (max-width: 1024px) {
+    .apps-head {
+      margin-bottom: 1.5rem;
+    }
+
+    .apps-lede {
+      margin-bottom: 0;
+    }
+
+    .lede-br {
+      display: none;
+    }
+
     .applications {
       padding: 1rem 4rem 4rem;
     }
