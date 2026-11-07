@@ -11,14 +11,25 @@
 <script>
   let current: { destroy(): void } | null = null;
 
-  async function mountTokamakView() {
+  // start the 3D only when it comes into view (saves work for visitors who never scroll there)
+  function whenVisible(el: Element, fn: () => void) {
+    if (!('IntersectionObserver' in window)) { fn(); return; }
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { io.disconnect(); fn(); }
+    }, { rootMargin: '200px' });
+    io.observe(el);
+  }
+
+  function mountTokamakView() {
     const host = document.querySelector<HTMLElement>('[data-tokamak]');
     if (!host || host.dataset.mounted === 'true') return;
     host.dataset.mounted = 'true';
-    const { mountTokamak } = await import('../lib/tokamak/fieldlines.js');
-    // the page may have been left while the module was loading
-    if (!host.isConnected) return;
-    current = mountTokamak(host);
+    whenVisible(host, async () => {
+      const { mountTokamak } = await import('../lib/tokamak/fieldlines.js');
+      // the page may have been left while the module was loading
+      if (!host.isConnected) return;
+      current = mountTokamak(host);
+    });
   }
 
   document.addEventListener('astro:page-load', mountTokamakView);

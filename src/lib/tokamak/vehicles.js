@@ -305,7 +305,7 @@ export function mountVehicles(root) {
   let renderer;
   try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); } catch (e) { return { destroy() {} }; }
   renderer.setClearColor(0x000000, 0);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, window.matchMedia('(pointer: fine)').matches ? 2 : 1.5));   // lighter on phones
   renderer.setScissorTest(true);
   const canvas = renderer.domElement;
   Object.assign(canvas.style, { display: 'block', width: '100%', height: '100%' });

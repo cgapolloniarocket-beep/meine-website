@@ -8,33 +8,44 @@ const items = [
 ];
 ---
 
-<aside class="applications" aria-labelledby="applications-title">
-  <p class="apps-eyebrow" id="applications-title">Applications</p>
+<section class="applications" aria-labelledby="applications-title">
+  <h2 class="apps-eyebrow" id="applications-title">Applications</h2>
   <p class="apps-lede">One engine. Three missions.</p>
   <ol class="apps-list">
     {items.map((it) => (
       <li class="app" data-app={it.kind}>
         <div class="app-art" data-app-art={it.kind} aria-hidden="true"></div>
         <div class="app-text">
-          <h2 class="app-name">{it.name}</h2>
+          <h3 class="app-name">{it.name}</h3>
           <p class="app-line">{it.text}</p>
         </div>
       </li>
     ))}
   </ol>
   <div class="apps-canvas" data-apps-canvas aria-hidden="true"></div>
-</aside>
+</section>
 
 <script>
   let api: { destroy(): void } | null = null;
 
-  async function mountApplications() {
+  // start the 3D only when it comes into view (saves work for visitors who never scroll there)
+  function whenVisible(el: Element, fn: () => void) {
+    if (!('IntersectionObserver' in window)) { fn(); return; }
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { io.disconnect(); fn(); }
+    }, { rootMargin: '200px' });
+    io.observe(el);
+  }
+
+  function mountApplications() {
     const root = document.querySelector<HTMLElement>('.applications');
     if (!root || root.dataset.mounted === 'true') return;
     root.dataset.mounted = 'true';
-    const { mountVehicles } = await import('../lib/tokamak/vehicles.js');
-    if (!root.isConnected) return;
-    api = mountVehicles(root);
+    whenVisible(root, async () => {
+      const { mountVehicles } = await import('../lib/tokamak/vehicles.js');
+      if (!root.isConnected) return;
+      api = mountVehicles(root);
+    });
   }
 
   document.addEventListener('astro:page-load', mountApplications);
@@ -53,6 +64,8 @@ const items = [
 
   .apps-eyebrow {
     margin: 0;
+    animation: none;
+    line-height: 1.4;
     font-family: 'Montserrat', sans-serif;
     font-size: 0.8rem;
     font-weight: 600;
@@ -149,6 +162,23 @@ const items = [
 
     .app-line {
       font-size: 0.85rem;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .app,
+    .app[data-app='spacecraft'] {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.5rem;
+      padding: 1.1rem 0;
+    }
+
+    .app-art {
+      aspect-ratio: 2 / 1;
+    }
+
+    .app-line {
+      max-width: none;
     }
   }
 

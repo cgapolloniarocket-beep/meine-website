@@ -20,62 +20,21 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
 import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js';
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
-import TokPhys from './physics.js';
+import TRACE from './st-trace.json';
 
 const LINE = '#a28aee';
 const CONFIG = {
-  params: { R0: 0.85, a: 0.65, kappa: 1.8, delta: 0.3, B0: 0.75, Ip: 2.0, config: 'limiter', n0: 0.5, Te0: 1.0, Ti0: 1.0, vrot: 0, lite: true },
-  psiN: 0.90, turns: [11, 15], elev: 30, fitW: 0.84, fitH: 0.86,
+  elev: 30, fitW: 0.84, fitH: 0.86,
   flow: { spacing: 0.75, speed: 0.75 },
 };
-const NTH = 600;
-
-function gcd(a, b) { while (b) { [a, b] = [b, a % b]; } return a; }
-
-/* Rational surface q = m/T near ψN: one field line closes after T poloidal
-   transits, its passes evenly spread in toroidal angle (gcd(m, T) = 1). */
-function rationalSurface(eq, psiN0, Tmin, Tmax) {
-  const qAt = (psiN) => eq.traceSurface(1 - psiN, 192).q;
-  const lo = Math.max(0.5, psiN0 - 0.3), hi = Math.min(0.985, psiN0 + 0.05), NS = 16;
-  const tab = [];
-  for (let i = 0; i <= NS; i++) { const p = lo + (hi - lo) * i / NS; tab.push([p, qAt(p)]); }
-  const interp = (qs) => {
-    for (let i = 0; i < NS; i++) {
-      const [p0, q0] = tab[i], [p1, q1] = tab[i + 1];
-      if ((qs - q0) * (qs - q1) <= 0 && q1 !== q0) return p0 + (p1 - p0) * (qs - q0) / (q1 - q0);
-    }
-    return null;
-  };
-  const q0 = qAt(psiN0);
-  let best = null;
-  for (let T = Tmin; T <= Tmax; T++) {
-    for (let dm = -3; dm <= 3; dm++) {
-      const m = Math.round(T * q0) + dm;
-      if (m < 1 || gcd(m, T) !== 1) continue;
-      const p = interp(m / T);
-      if (p === null) continue;
-      const cost = Math.abs(p - psiN0);
-      if (!best || cost < best.cost) best = { T, m, psiN: p, cost };
-    }
-  }
-  if (!best) { const m = Math.round(Tmin * q0); return { T: Tmin, m: gcd(m, Tmin) === 1 ? m : m + 1, psiN: psiN0 }; }
-  let a = best.psiN - 0.004, b = best.psiN + 0.004;
-  let fa = qAt(a) - best.m / best.T, fb = qAt(b) - best.m / best.T;
-  for (let k = 0; k < 6 && fb !== fa; k++) {
-    const c = b - fb * (b - a) / (fb - fa); a = b; fa = fb; b = c; fb = qAt(b) - best.m / best.T;
-    if (Math.abs(fb) < 1e-7) break;
-  }
-  best.psiN = b;
-  return best;
-}
 
 /* One closed field line over T transits → segment pairs (scene: outer radius = 1).
    dist = arc length to the nearest inboard-midplane crossing (k = NTH/2). */
-function fieldLineSegments(eq, psiN, turns, qTarget, sceneScale, kMeet, nth = NTH, dphiMax = 0.02) {
-  const tr = eq.traceSurface(1 - psiN, nth);
+function fieldLineSegments(trace, sceneScale, kMeet, dphiMax = 0.02) {
+  const tr = trace, nth = trace.nth, turns = trace.T, qTarget = trace.q;
   let sum = 0; for (let k = 0; k < nth; k++) sum += tr.dphi[k];
   const fix = qTarget ? (2 * Math.PI * qTarget) / sum : 1;      // exact closure
-  const s = eq.params.R0 * sceneScale;
+  const s = trace.R0 * sceneScale;
   const P = (x, y, ph) => [x * s * Math.sin(ph), y * s, x * s * Math.cos(ph)];
   const out = [], sv = [], meets = [];
   let phi = 0, prev = P(tr.pts[0][0], tr.pts[0][1], 0), sG = 0;
@@ -122,14 +81,10 @@ export function flowPatch(fs) {
   return fs;
 }
 
-let cached = null;   // equilibrium + line geometry, reused across page visits
+let cached = null;   // line geometry, reused across page visits
 function buildGeometry() {
   if (cached) return cached;
-  const eq = TokPhys.solve(CONFIG.params);
-  if (!eq.valid) return null;
-  const S = 1 / (CONFIG.params.R0 + CONFIG.params.a);
-  const rs = rationalSurface(eq, CONFIG.psiN, CONFIG.turns[0], CONFIG.turns[1]);
-  cached = fieldLineSegments(eq, rs.psiN, rs.T, rs.m / rs.T, S, NTH / 2);
+  cached = fieldLineSegments(TRACE, 1 / (TRACE.R0 + TRACE.a), TRACE.nth / 2);
   return cached;
 }
 
@@ -147,7 +102,7 @@ export function mountTokamak(host) {
     return { destroy() {} };
   }
   renderer.setClearColor(0x000000, 0);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, window.matchMedia('(pointer: fine)').matches ? 2 : 1.5));   // lighter on phones
   const canvas = renderer.domElement;
   canvas.style.display = 'block';
   canvas.style.width = '100%';
